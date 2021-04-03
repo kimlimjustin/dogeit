@@ -1,0 +1,27 @@
+.centeredForm {
+    margin: 20px 0;
+    padding: 40px 10px;
+    border-radius: 10px;
+    transition: all .4s;
+    background-color: #F0F0F0;
+}
+
+.github-login-btn{
+    margin: 1rem auto;
+    width: calc(fit-content + 10rem);
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.github-login-btn svg{
+    display: inline-block;
+    width: 1.2rem;
+    vertical-align: sub;
+    margin-right: .5rem;
+}
+
+.form-error{
+    color: #ff7777;
+    font-family: sans-serif;
+    text-align: center;
+}
