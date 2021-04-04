@@ -2,11 +2,12 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import Auth from "./Components/auth";
 import Home from "./Components/home";
 import OAuth from "./Components/oauth";
 import Logout from "./Components/logout";
 import Crypto from "crypto-js";
+import Login from "./Components/Login";
+import Register from "./Components/Register";
 
 const decryptFetchingData = (message) => {
     let msg = Crypto.AES.decrypt(message, process.env.REACT_APP_SECURITY_KEY);
@@ -31,7 +32,8 @@ const App = () => {
         <Router>
             <Switch>
                 <Route exact path = "/" component = {(props) => <Home {...props} userInfo = {userInfo} />} />
-                <Route path = "/auth" component = {(props) => <Auth {...props} userInfo={userInfo} />} />
+                <Route path = "/login" component = {(props) => <Login {...props} userInfo = {userInfo} />} />
+                <Route path = "/register" component = {(props) => <Register {...props} userInfo = {userInfo} />} />
                 <Route path = "/oauth" component = {OAuth} />
                 <Route path = "/logout" component = {Logout} />
             </Switch>

@@ -36,7 +36,7 @@ const OAuth = ({location}) => {
         }
     }, [location.search])
     return(
-        <h1>Loading...</h1>
+        <h1 className="ml-3">Loading...</h1>
     )
 }
 
