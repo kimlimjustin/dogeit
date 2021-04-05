@@ -7,7 +7,7 @@ const Logout = () => {
         .then(() => window.location = "/")
     }, [])
     return(
-        <h1 className="ml-3">Logging out...</h1>
+        <h1 className="ml-3 loading-text">Logging out...</h1>
     )
 }
 

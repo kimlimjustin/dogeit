@@ -108,14 +108,19 @@ router.post('/oauth', jsonParser, (req, res) => {
                     }else{
                         User.findOne({email: userResponse.data.email}, (err, user) => {
                             if(user){
-                                return res.cookie('token', jwt.sign({ user: {_id: user._id, name: user.name, email: user.email, secret_token: user.secret_token} }, 'TOP_SECRET'), {httpOnly: true}).json({"message": "Signed in successfully"});
+                                if(user.third_party.is_third_party){
+                                    return res.cookie('token', jwt.sign({ user: {_id: user._id, name: user.name, email: user.email, secret_token: user.secret_token} }, 'TOP_SECRET'), {httpOnly: true}).json({"message": "Signed in successfully"});
+                                }else{
+                                    return res.status(400).json({"status": "001"})
+                                }
                             }
                         })
                     }
                 })
             })
-        }else return res.status(400).json({"message": "Access token required"})
+        }else return res.status(400).json({"status": "000"})
     })
+    .catch(err => console.log(err.response))
 })
 
 router.post('/logout', jsonParser, (req, res) => {

@@ -36,7 +36,11 @@ body{
     top: 0;
     right: 0;
     text-align: center;
-    color: var(--white);
+    color: var(--dark-color);
+}
+
+.github-login-corner svg{
+    fill: var(--yellow-color);
 }
 
 .octo-arm{transform-origin: 130px 106px;}
@@ -166,6 +170,9 @@ body{
 
 .ml-3{
     margin-left: 3rem;
+}
+.loading-text{
+    color: var(--yellow-color);
 }
 
 .auth-box{
