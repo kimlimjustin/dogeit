@@ -5,8 +5,11 @@ const jsonParser = bodyParser.json();
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const User = require('../Models/user.model');
+const Recovery = require('../Models/recovery.models');
 const axios = require('axios');
 const CryptoAES = require('crypto-js/aes');
+const nodemailer = require('nodemailer');
+const RecoveryEmail = require("../Email/recovery.email");
 //const CryptoENC = require('crypto-js/enc-utf8');
 global.atob = require('atob');
 
@@ -25,6 +28,8 @@ const encryptFetchingData = data => {
     const encrypted = CryptoAES.encrypt(JSON.stringify({data}), process.env.SECURITY_KEY);
     return encrypted.toString();
 }
+
+const mailsocket = nodemailer.createTransport({service: process.env.EMAIL_PROVIDER, auth: {user: process.env.EMAIL_ADDRESS, pass: process.env.EMAIL_PASS}})
 
 router.post('/register', async (req, res, next) => {
     passport.authenticate('signup', async(err, user) => {
@@ -125,6 +130,52 @@ router.post('/oauth', jsonParser, (req, res) => {
 
 router.post('/logout', jsonParser, (req, res) => {
     return res.cookie('token', '', {maxAge: 0}).json({"message": "Logged out"})
+})
+
+router.post('/password_recovery', jsonParser, (req, res) => {
+    User.findOne({email: req.body.email}, async (err, user) => {
+        if(err || !user) res.status(400).json({"status": "003"})
+        else{
+            const alreadyRequested = await Recovery.findOne({user: user._id, ip: req.ip})
+            if(alreadyRequested) res.status(400).json({"status": "002"})
+            else{
+                const recovery = new Recovery({token: generateToken(20), user: user._id, ip: req.ip })
+                recovery.save()
+                .then(() => {
+                    mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: user.email, subject: "Dogeit account recovery", html: RecoveryEmail(recovery.token)})
+                    .then(() => res.json({message: "Success"}))
+                })
+                .catch(err => console.log(err))
+            }
+        }
+    })
+})
+
+router.post('/validate_recovery_token', jsonParser, async (req, res) => {
+    const valid = await Recovery.findOne({token:req.body.token, ip: req.ip})
+    if(valid) res.json({"valid": true})
+    else res.status(400).json({"valid": false})
+})
+
+router.post('/recover_password', jsonParser, (req, res) => {
+    const {token, pass} = req.body
+    Recovery.findOne({token}, (err, recovery) => {
+        if(!recovery || err) res.status(400).json({"message": "Something went wrong"})
+        else if(recovery.ip !== req.ip) res.status(400).json({'status': "004"})
+        else{
+            User.findOne({_id: recovery.user}, (err, user) => {
+                if(!user || err) res.status(400).json({"message": "Something went wrong"})
+                else{
+                    user.password = pass
+                    user.save()
+                    .then(() => {
+                        recovery.delete()
+                        .then(() => res.json({"message": "Success"}))
+                    })
+                }
+            })
+        }
+    })
 })
 
 module.exports = router;

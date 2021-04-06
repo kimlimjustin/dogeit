@@ -8,6 +8,7 @@ import Logout from "./Components/logout";
 import Crypto from "crypto-js";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
+import Recovery from "./Components/recovery";
 
 const decryptFetchingData = (message) => {
     let msg = Crypto.AES.decrypt(message, process.env.REACT_APP_SECURITY_KEY);
@@ -36,6 +37,7 @@ const App = () => {
                 <Route path = "/register" component = {(props) => <Register {...props} userInfo = {userInfo} />} />
                 <Route path = "/oauth" component = {OAuth} />
                 <Route path = "/logout" component = {Logout} />
+                <Route path = "/recovery" component = {Recovery} />
             </Switch>
         </Router>
     )

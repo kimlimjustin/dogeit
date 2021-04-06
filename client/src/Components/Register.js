@@ -73,8 +73,15 @@ const Register = ({userInfo}) => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <p className="form-label">Already have account? <a className="link" href="/login">Login</a></p>
-                        <button className="btn form-control theme-adjust">Register</button>
+                        <div className="row">
+                            <div className="col-6">
+                                <p className="form-label">Already have account? <a className="link" href="/login">Login</a></p>
+                            </div>
+                            <div className="col-6">
+                                <p className="form-label">Forgot password? <a className="link" href="/recovery">Reset Password</a></p>
+                            </div>
+                        </div>
+                        <button className="btn form-control">Register</button>
                     </div>
                 </form>
             </div>

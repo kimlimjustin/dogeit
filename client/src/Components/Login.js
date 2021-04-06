@@ -51,8 +51,15 @@ const Login = ({userInfo}) => {
                         <span className="input-onFocus"></span>
                     </div>
                     <div className="form-group">
-                        <p className="form-label">Don't have account yet? <a className="link" href="/register">Register</a></p>
-                        <button className="btn form-control theme-adjust">Login</button>
+                        <div className="row">
+                            <div className="col-6">
+                                <p className="form-label">Don't have account yet? <a className="link" href="/register">Register</a></p>
+                            </div>
+                            <div className="col-6">
+                                <p className="form-label">Forgot password? <a className="link" href="/recovery">Reset Password</a></p>
+                            </div>
+                        </div>
+                        <button className="btn form-control">Login</button>
                     </div>
                 </form>
             </div>
