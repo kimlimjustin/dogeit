@@ -45,6 +45,8 @@ const Recovery = ({location}) => {
                 setError("You have recently requested a password recovery, please try it again in one hour.")
             }else if(err.response.data.status === "003"){
                 setError("User not found")
+            }else if(err.response.data.status === "005"){
+                setError("Your email address is not verified. We can't recover it for you :(")
             }
         })
     }

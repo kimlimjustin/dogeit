@@ -142,6 +142,7 @@ router.post('/password_recovery', jsonParser, (req, res) => {
         else{
             const alreadyRequested = await Recovery.findOne({user: user._id, ip: req.ip})
             if(alreadyRequested) res.status(400).json({"status": "002"})
+            else if(!user.is_verified) res.status(400).json({"status": "005"})
             else{
                 const recovery = new Recovery({token: generateToken(20), user: user._id, ip: req.ip })
                 recovery.save()
@@ -190,7 +191,11 @@ router.post('/verify_user', jsonParser, async (req, res) => {
                 user.verification_code = "Verified"
                 user.is_verified = true
                 user.save()
-                .then(() => res.json({"valid": true}))
+                .then(() => {
+                    const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token};
+                    const token = jwt.sign({ user: body }, 'TOP_SECRET');
+                    res.cookie('token', token, {httpOnly: true}).json({"valid": true})   
+                })
             })
         }
         else res.status(400).json({"valid": false})
