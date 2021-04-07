@@ -94,6 +94,14 @@ body{
     margin: 0.2rem 0;
 }
 
+.verify-text{
+    font-weight: bold;
+	text-align: center;
+	font-family: "Noto";
+	padding: 2px 5px;
+    margin: 0.2rem 0;
+}
+
 .form-label {
     font-family: "Roboto", "Work";
     margin: 10px 0;

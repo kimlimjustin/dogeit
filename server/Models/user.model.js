@@ -25,6 +25,14 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
+    is_verified: {
+        type: Boolean,
+        default: false
+    },
+    verification_code: {
+        type: String,
+        required: true
+    },
     third_party:{
         is_third_party: {
             type: Boolean,

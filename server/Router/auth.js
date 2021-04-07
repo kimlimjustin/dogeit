@@ -29,7 +29,7 @@ passport.use('signup', new localStrategy({  usernameField: 'email', passwordFiel
         const emailExist = await UserModel.exists({email: email})
         if(emailExist) return done(null, false)
         else{
-            const user = await UserModel.create({ name: req.body.username , email: email, password: password, secret_token:generateToken(10), third_party: {is_third_party: false} });
+            const user = await UserModel.create({ name: req.body.username , email: email, password: password, secret_token:generateToken(10), third_party: {is_third_party: false}, verification_code: generateToken(20) });
             return done(null, user);
         }
     } catch (error) {

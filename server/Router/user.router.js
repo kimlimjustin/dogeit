@@ -10,6 +10,7 @@ const axios = require('axios');
 const CryptoAES = require('crypto-js/aes');
 const nodemailer = require('nodemailer');
 const RecoveryEmail = require("../Email/recovery.email");
+const EmailVerification = require("../Email/verification.email");
 //const CryptoENC = require('crypto-js/enc-utf8');
 global.atob = require('atob');
 
@@ -40,8 +41,8 @@ router.post('/register', async (req, res, next) => {
                     if(error) return next(error);
                     const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token};
                     const token = jwt.sign({ user: body }, 'TOP_SECRET');
-
-                    return res.cookie('token', token, {httpOnly: true}).json({token});
+                    mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: user.email, subject: "Dogeit Email Verification", html: EmailVerification(user.verification_code)})
+                    .then(() => res.cookie('token', token, {httpOnly: true}).json({token}))
                 })
             }else{
                 return res.status(406).json({"message": "Email has been taken."})
@@ -105,10 +106,13 @@ router.post('/oauth', jsonParser, (req, res) => {
             .then(userResponse => {
                 User.exists({email: userResponse.data.email}, (err, exist) => {
                     if(!exist){
-                        const newUser = new User({email: userResponse.data.email, name: userResponse.data.name, password: generateToken(12), secret_token: generateToken(10), third_party: {is_third_party: true, provider: "GitHub", access_token: access_token}})
+                        const newUser = new User({email: userResponse.data.email, name: userResponse.data.name, password: generateToken(12), secret_token: generateToken(10), third_party: {is_third_party: true, provider: "GitHub", access_token: access_token}, verification_code: generateToken(20)})
                         newUser.save()
                         .then(() => {
-                            return res.cookie('token', jwt.sign({ user: {_id: newUser._id, name: newUser.name, email: newUser.email, secret_token: newUser.secret_token} }, 'TOP_SECRET'), {httpOnly: true}).json({"message": "Signed up successfully"});
+                            mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: newUser.email, subject: "Dogeit Email Verification", html: EmailVerification(newUser.verification_code)})
+                            .then(() => {
+                                return res.cookie('token', jwt.sign({ user: {_id: newUser._id, name: newUser.name, email: newUser.email, secret_token: newUser.secret_token} }, 'TOP_SECRET'), {httpOnly: true}).json({"message": "Signed up successfully"});
+                            })
                         })
                     }else{
                         User.findOne({email: userResponse.data.email}, (err, user) => {
@@ -142,7 +146,7 @@ router.post('/password_recovery', jsonParser, (req, res) => {
                 const recovery = new Recovery({token: generateToken(20), user: user._id, ip: req.ip })
                 recovery.save()
                 .then(() => {
-                    mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: user.email, subject: "Dogeit account recovery", html: RecoveryEmail(recovery.token)})
+                    mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: user.email, subject: "Dogeit Account Recovery", html: RecoveryEmail(recovery.token)})
                     .then(() => res.json({message: "Success"}))
                 })
                 .catch(err => console.log(err))
@@ -176,6 +180,21 @@ router.post('/recover_password', jsonParser, (req, res) => {
             })
         }
     })
+})
+
+router.post('/verify_user', jsonParser, async (req, res) => {
+    if(req.body.token !== "Verified"){
+        const valid = await User.findOne({verification_code: req.body.token})
+        if(valid){
+            User.findOne({verification_code: req.body.token}, (err, user) => {
+                user.verification_code = "Verified"
+                user.is_verified = true
+                user.save()
+                .then(() => res.json({"valid": true}))
+            })
+        }
+        else res.status(400).json({"valid": false})
+    }else res.status(400).json({"valid": false})
 })
 
 module.exports = router;
