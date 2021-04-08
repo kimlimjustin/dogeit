@@ -202,4 +202,27 @@ router.post('/verify_user', jsonParser, async (req, res) => {
     }else res.status(400).json({"valid": false})
 })
 
+router.post('/update_account', jsonParser, async (req, res) => {
+    if(req.headers.cookie){
+        let user =parseJwt(parseHeader(req.headers.cookie).value).user
+        if(user){
+            User.findOne({secret_token: user.secret_token, name: user.name, email: user.email}, (err, user) => {
+                if(err || !user) res.status(400).json("User not found.")
+                else{
+                    user.name = req.body.name
+                    user.email = req.body.email
+                    user.save()
+                    .then(() => {
+                        const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token};
+                        const token = jwt.sign({ user: body }, 'TOP_SECRET');
+                        res.cookie('token', token, {httpOnly: true}).json({user: encryptFetchingData(body)})
+                    })
+                }
+            })
+        }else{
+            return res.status(403).json("Request invalid.")
+        }
+    }else return res.status(403).json("Request invalid.")
+})
+
 module.exports = router;
