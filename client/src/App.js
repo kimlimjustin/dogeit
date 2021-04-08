@@ -34,7 +34,7 @@ const App = () => {
     }, [])
     return(
         <Router>
-            <Route path = "*" component = {Navbar} />
+            <Route path = "*" component = {(props) => <Navbar {...props} userInfo = {userInfo} />} />
             <Switch>
                 <Route exact path = "/" component = {(props) => <Home {...props} userInfo = {userInfo} />} />
                 <Route path = "/login" component = {(props) => <Login {...props} userInfo = {userInfo} />} />

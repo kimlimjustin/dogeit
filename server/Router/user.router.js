@@ -106,7 +106,7 @@ router.post('/oauth', jsonParser, (req, res) => {
             .then(userResponse => {
                 User.exists({email: userResponse.data.email}, (err, exist) => {
                     if(!exist){
-                        const newUser = new User({email: userResponse.data.email, name: userResponse.data.name, password: generateToken(12), secret_token: generateToken(10), third_party: {is_third_party: true, provider: "GitHub", access_token: access_token}, verification_code: generateToken(20)})
+                        const newUser = new User({email: userResponse.data.email, name: userResponse.data.login, password: generateToken(12), secret_token: generateToken(10), third_party: {is_third_party: true, provider: "GitHub", access_token: access_token}, verification_code: generateToken(20)})
                         newUser.save()
                         .then(() => {
                             mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: newUser.email, subject: "Dogeit Email Verification", html: EmailVerification(newUser.verification_code)})
