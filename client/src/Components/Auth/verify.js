@@ -60,8 +60,8 @@ const Verify = ({location}) => {
             <div className="box auth-box">
                 {done?
                 <>
-                <h1 className="verify-text">Verified successfully :)</h1>
-                <h3 className="verify-text"> Redirecting you to home page in three seconds...</h3>
+                <h1 className="box-title">Verified successfully :)</h1>
+                <h3 className="box-title"> Redirecting you to home page in three seconds...</h3>
                 </>
                 :<>
                 {error?
