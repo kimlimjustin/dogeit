@@ -3,8 +3,12 @@ import React, { useEffect, useState } from "react";
 import encryptFetchingData from "../Lib/encryptFetchingData";
 import parseQueryVariable from "../Lib/parseQueryVariable";
 
+interface Prop{
+    main: string,
+    [key:string]: string
+}
 
-const Recovery = ({location}) => {
+const Recovery = (props: Prop) => {
     const [inputEmail, setInputEmail] = useState('');
     const [error, setError] = useState('');
     const [status, setStatus] = useState("Enter your email address and we will send you a password reset link.")
@@ -16,7 +20,7 @@ const Recovery = ({location}) => {
     const [resetPassErr, setResetPassErr] = useState('');
     const [done, setDone] = useState(false);
 
-    const RecoverAccount = e => {
+    const RecoverAccount = (e: React.SyntheticEvent) => {
         e.preventDefault()
         axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/password_recovery`, {data: encryptFetchingData({email: inputEmail})}, {withCredentials: true})
         .then(res => {
@@ -35,10 +39,10 @@ const Recovery = ({location}) => {
     }
 
     useEffect(() => {
-        if(location.search){
-            setToken(parseQueryVariable('token',location.search))
+        if(props?.location?.search){
+            setToken(parseQueryVariable('token', props.location.search.toString())!)
         }
-    }, [location.search])
+    }, [props])
 
     useEffect(() => {
         if(token){
@@ -59,7 +63,7 @@ const Recovery = ({location}) => {
         else setResetPassErr("")
     }, [inputPassword, inputConfirmation])
 
-    const ResetPass = e => {
+    const ResetPass = (e: React.SyntheticEvent) => {
         e.preventDefault();
         if(inputPassword === inputConfirmation){
             axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/recover_password`, {data: encryptFetchingData({token, pass:inputPassword})}, {withCredentials: true})
@@ -72,13 +76,13 @@ const Recovery = ({location}) => {
         }
     }
 
-    const delay = ms => new Promise(res => setTimeout(res, ms));
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
     useEffect(() => {
         const Redirect = async () => {
             if(done){
                 await delay(3000)
-                .then(() => window.location = "/")
+                .then(() => window.location.href = "/")
             }
         }
         Redirect()

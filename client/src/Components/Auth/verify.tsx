@@ -3,17 +3,22 @@ import React, { useEffect, useState } from "react";
 import encryptFetchingData from "../Lib/encryptFetchingData";
 import parseQueryVariable from "../Lib/parseQueryVariable";
 
-const Verify = ({location}) => {
+interface Prop{
+    main: string,
+    [key:string]: string
+}
+
+const Verify = (props: Prop) => {
     const [token, setToken] = useState('');
     const [done, setDone] = useState(false);
     const [error, setError] = useState('');
     
 
     useEffect(() => {
-        if(location.search){
-            setToken(parseQueryVariable('token',location.search))
+        if(props?.location?.search){
+            setToken(parseQueryVariable('token',props.location.search.toString())!)
         }
-    }, [location.search])
+    }, [props])
 
     useEffect(() => {
         if(token){
@@ -25,13 +30,13 @@ const Verify = ({location}) => {
 
     useEffect(() => console.log(error), [error])
 
-    const delay = ms => new Promise(res => setTimeout(res, ms));
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
     useEffect(() => {
         const Redirect = async () => {
             if(done){
                 await delay(3000)
-                .then(() => window.location = "/")
+                .then(() => window.location.href = "/")
             }
         }
         Redirect()
