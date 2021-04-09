@@ -48,11 +48,18 @@ const Navbar = ({userInfo}) => {
     const changeProfilePicture = e => {
         if(e.target.files[0].size > 1048576){
             setInputFileErr("File size should be less than 1MB.")
-        }else setInputFileErr('')
-        const reader = new FileReader();
-        reader.readAsDataURL(e.target.files[0])
-        reader.onload = () => {
-            setInputFile(reader.result)
+        }else{
+            setInputFileErr('')
+            const img = new Image();
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d")
+            img.onload = () => {
+                canvas.width = 900;
+                canvas.height = 900;
+                ctx.drawImage(img, 0, 0, 900, 900)
+                setInputFile(canvas.toDataURL())
+            }
+            img.src = URL.createObjectURL(e.target.files[0])
         }
     }
 

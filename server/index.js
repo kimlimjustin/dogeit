@@ -12,7 +12,7 @@ require('./Router/auth')
 const app = express();
 const server = http.createServer(app);
 
-app.use(express.json({limit: '2mb'}));
+app.use(express.json({limit: '5mb'}));
 
 app.use(express.json())
 app.use(cors({origin: process.env.CLIENT_URL, optionsSuccessStatus: 200, credentials: true}));
