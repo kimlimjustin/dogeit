@@ -1,25 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import CryptoAES from "crypto-js/aes";
-
-const SECURITY_KEY = process.env.REACT_APP_SECURITY_KEY;
-
-const parseQueryVariable = (variable, search) => {
-    var query = search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=');
-        if (decodeURIComponent(pair[0]) === variable) {
-            return decodeURIComponent(pair[1]);
-        }
-    }
-    return null
-}
-
-const encryptFetchingData = data => {
-    const encrypted = CryptoAES.encrypt(JSON.stringify(data), SECURITY_KEY);
-    return encrypted.toString();
-}
+import encryptFetchingData from "../Lib/encryptFetchingData";
+import parseQueryVariable from "../Lib/parseQueryVariable";
 
 const OAuth = ({location}) => {
     const [error, setError] = useState('');

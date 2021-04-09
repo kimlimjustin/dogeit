@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import Crypto from "crypto-js";
+import decryptFetchingData from "./Components/Lib/decryptFetchingData"
 
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Home from "./Components/home";
@@ -13,10 +13,6 @@ import Verify from "./Components/Auth/verify";
 
 import Navbar from "./Components/navbar";
 
-const decryptFetchingData = (message) => {
-    let msg = Crypto.AES.decrypt(message, process.env.REACT_APP_SECURITY_KEY);
-    return msg.toString(Crypto.enc.Utf8)
-}
 
 const App = () => {
     const [userInfo, setUserInfo] = useState('');
