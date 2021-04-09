@@ -323,6 +323,24 @@ body{
     color: var(--yellow-color);
 }
 @keyframes modalanimate{from{transform: scale(0);opacity:0} to{transform: scale(1);opacity:1}}
+
+.upload-pp-box{
+    width: 300px;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.upload-pp-box img{
+    width: inherit;
+    border-radius: 50%;
+    position: relative;
+}
+
+
+#upload-profile-picture{
+    display: none;
+}
 @media only screen and (max-width: 600px){
     [class*="col-"]:not([class*="col-ex"]) {
 		width: 100% !important;

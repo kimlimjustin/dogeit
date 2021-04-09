@@ -13,10 +13,15 @@ const decryptFetchingData = (message) => {
 const Navbar = ({userInfo}) => {
     const [newUsername, setNewUsername] = useState(userInfo.name);
     const [newEmail, setNewEmail] = useState(userInfo.email);
-    const [user, setUser] = useState('')
+    const [user, setUser] = useState('');
+    const [inputFile, setInputFile] = useState("");
+    const [inputFileErr, setInputFileErr] = useState('')
 
     useEffect(() => {
         setUser(userInfo)
+        if(userInfo){
+            setInputFile(`${process.env.REACT_APP_SERVER_URL}/${userInfo.profile_picture.filename}`)
+        }
     }, [userInfo])
 
     const openSetting = () => {
@@ -34,11 +39,23 @@ const Navbar = ({userInfo}) => {
 
     const editAccount = e => {
         e.preventDefault()
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/update_account`, {data: encryptFetchingData({name: newUsername, email: newEmail})}, {withCredentials: true})
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/update_account`, {data: encryptFetchingData({name: newUsername, email: newEmail, pp: inputFile})}, {withCredentials: true})
         .then(res => {
             setUser(JSON.parse(decryptFetchingData(res.data.user)).data)
         })
     }
+
+    const changeProfilePicture = e => {
+        if(e.target.files[0].size > 1048576){
+            setInputFileErr("File size should be less than 1MB.")
+        }else setInputFileErr('')
+        const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0])
+        reader.onload = () => {
+            setInputFile(reader.result)
+        }
+    }
+
     return(
         <>
             <div className="topnav topnav-shadow">
@@ -72,7 +89,14 @@ const Navbar = ({userInfo}) => {
                         <form onSubmit = {editAccount}>
                             <div className="form-group">
                                 <h2>Account Preference </h2>
+                                <h4 className="form-error">{inputFileErr}</h4>
                             </div>
+                            <label htmlFor="upload-profile-picture">
+                                <div className="upload-pp-box">
+                                    <img src={inputFile} alt={`${user.name}'s profile`} id="profile-picture-preview" />
+                                </div>
+                            </label>
+                            <input id="upload-profile-picture" type="file" accept="image/*" onChange = {changeProfilePicture}></input>
                             <div className="form-group form-animate">
                                 <h3 className="form-label">Username:</h3>
                                 <input className="input-animate" type="text" value = {newUsername} onChange = {({target: {value}}) => setNewUsername(value)} />

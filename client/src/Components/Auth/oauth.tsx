@@ -10,12 +10,13 @@ interface Prop{
 
 const OAuth = (props: Prop) => {
     const [error, setError] = useState('');
+    const [fetched, setFetched] = useState(0) // Important for limiting react sending request
     
     useEffect(() => {
         if(props?.location?.search){
             const code = parseQueryVariable('code',props.location.search.toString())
             console.log(code)
-            if(code){
+            if(code && fetched === 0){
                 const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
                 axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/oauth`, {data: encryptFetchingData({code})}, {withCredentials: true})
                 .then(response => {
@@ -29,9 +30,10 @@ const OAuth = (props: Prop) => {
                     }
                     await delay(3000).then(() => window.location.href = "/login")
                 })
+                setFetched(1)
             }
         }
-    }, [props])
+    }, [props, fetched])
     return(
         <>
         {!error?

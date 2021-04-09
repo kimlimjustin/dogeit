@@ -1,4 +1,6 @@
 const express = require('express');
+const path = require('path');
+const fs = require('fs');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -106,19 +108,27 @@ router.post('/oauth', jsonParser, (req, res) => {
             .then(userResponse => {
                 User.exists({email: userResponse.data.email}, (err, exist) => {
                     if(!exist){
-                        const newUser = new User({email: userResponse.data.email, name: userResponse.data.login, password: generateToken(12), secret_token: generateToken(10), third_party: {is_third_party: true, provider: "GitHub", access_token: access_token}, verification_code: generateToken(20)})
+                        const secretToken = generateToken(10);
+                        const filePath = path.resolve(__dirname + "/../Public", `PROFILE_PICTURE_${secretToken}.png`)
+                        const writer = fs.createWriteStream(filePath)
+                        axios({url: userResponse.data.avatar_url, method: "GET", responseType: 'stream'})
+                        .then(avatarResponse => avatarResponse.data.pipe(writer))
+                        .catch(err => console.log(err))
+
+                        const newUser = new User({email: userResponse.data.email, name: userResponse.data.login, password: generateToken(12), secret_token: secretToken, third_party: {is_third_party: true, provider: "GitHub", access_token: access_token}, verification_code: generateToken(20), profile_picture: {filename:`${secretToken}.png`}})
                         newUser.save()
                         .then(() => {
                             mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: newUser.email, subject: "Dogeit Email Verification", html: EmailVerification(newUser.verification_code)})
                             .then(() => {
-                                return res.cookie('token', jwt.sign({ user: {_id: newUser._id, name: newUser.name, email: newUser.email, secret_token: newUser.secret_token} }, 'TOP_SECRET'), {httpOnly: true}).json({"message": "Signed up successfully"});
+                                return res.cookie('token', jwt.sign({ user: {_id: newUser._id, name: newUser.name, email: newUser.email, secret_token: newUser.secret_token, profile_picture: newUser.profile_picture} }, 'TOP_SECRET'), {httpOnly: true}).json({"message": "Signed up successfully"});
                             })
                         })
+                        .catch(err => console.log(err))
                     }else{
                         User.findOne({email: userResponse.data.email}, (err, user) => {
                             if(user){
                                 if(user.third_party.is_third_party){
-                                    return res.cookie('token', jwt.sign({ user: {_id: user._id, name: user.name, email: user.email, secret_token: user.secret_token} }, 'TOP_SECRET'), {httpOnly: true}).json({"message": "Signed in successfully"});
+                                    return res.cookie('token', jwt.sign({ user: {_id: user._id, name: user.name, email: user.email, secret_token: user.secret_token, profile_picture: user.profile_picture} }, 'TOP_SECRET'), {httpOnly: true}).json({"message": "Signed in successfully"});
                                 }else{
                                     return res.status(400).json({"status": "001"})
                                 }
@@ -127,6 +137,7 @@ router.post('/oauth', jsonParser, (req, res) => {
                     }
                 })
             })
+            .catch(() => {})
         }else return res.status(400).json({"status": "000"})
     })
     .catch(err => console.log(err.response))
@@ -209,8 +220,15 @@ router.post('/update_account', jsonParser, async (req, res) => {
             User.findOne({secret_token: user.secret_token, name: user.name, email: user.email}, (err, user) => {
                 if(err || !user) res.status(400).json("User not found.")
                 else{
+                    // Delete old proifle picture
+                    fs.unlink(__dirname + "/../Public/" +user.profile_picture.filename,  (err)=> {if(err)console.log(err)})
+                    // Write new Profile picture into disk
+                    const newAvatarName = `PROFILE_PICTURE_${generateToken(10)}.png`;
+                    const base64Data = req.body.pp.replace(/^data:image\/png;base64,/, "");
+                    fs.writeFile(`${__dirname}/../Public/${newAvatarName}`, base64Data, {encoding: 'base64'}, err => {if(err)console.log(err)})
                     user.name = req.body.name
                     user.email = req.body.email
+                    user.profile_picture = {filename: newAvatarName}
                     user.save()
                     .then(() => {
                         const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token, profile_picture: user.profile_picture};
