@@ -33,6 +33,10 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    profile_picture: {
+        type: Object,
+        required: true
+    },
     third_party:{
         is_third_party: {
             type: Boolean,

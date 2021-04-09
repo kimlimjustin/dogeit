@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const CryptoAES = require('crypto-js/aes');
 const CryptoENC = require('crypto-js/enc-utf8');
+const path = require('path');
 
 require('dotenv').config();
 require('./Router/auth')
@@ -13,6 +14,8 @@ const server = http.createServer(app);
 
 app.use(express.json())
 app.use(cors({origin: process.env.CLIENT_URL, optionsSuccessStatus: 200, credentials: true}));
+
+app.use(express.static(path.join(__dirname, "/Public/")));
 
 app.use((req, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", process.env.CLIENT_URL)

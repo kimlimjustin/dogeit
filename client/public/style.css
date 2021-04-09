@@ -273,6 +273,7 @@ body{
     width: 1rem;
     margin: 0 5px;
     vertical-align: middle;
+    border-radius: 50%;
 }
 
 .topnav-opt{

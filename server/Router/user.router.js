@@ -39,7 +39,7 @@ router.post('/register', async (req, res, next) => {
             if(user){
                 req.login(user, {session: false}, async (error) => {
                     if(error) return next(error);
-                    const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token};
+                    const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token , profile_picture: user.profile_picture};
                     const token = jwt.sign({ user: body }, 'TOP_SECRET');
                     mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: user.email, subject: "Dogeit Email Verification", html: EmailVerification(user.verification_code)})
                     .then(() => res.cookie('token', token, {httpOnly: true}).json({token}))
@@ -61,7 +61,7 @@ router.post('/login', async(req, res, next) => {
             }
             req.login(user, {session: false}, async (error) => {
                 if(error) return next(error);
-                const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token};
+                const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token, profile_picture: user.profile_picture};
                 const token = jwt.sign({ user: body }, 'TOP_SECRET');
 
                 return res.cookie('token', token, {httpOnly: true}).json({"message": "Logged in successfully"});
@@ -192,7 +192,7 @@ router.post('/verify_user', jsonParser, async (req, res) => {
                 user.is_verified = true
                 user.save()
                 .then(() => {
-                    const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token};
+                    const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token, profile_picture: user.profile_picture};
                     const token = jwt.sign({ user: body }, 'TOP_SECRET');
                     res.cookie('token', token, {httpOnly: true}).json({"valid": true})   
                 })
@@ -213,7 +213,7 @@ router.post('/update_account', jsonParser, async (req, res) => {
                     user.email = req.body.email
                     user.save()
                     .then(() => {
-                        const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token};
+                        const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token, profile_picture: user.profile_picture};
                         const token = jwt.sign({ user: body }, 'TOP_SECRET');
                         res.cookie('token', token, {httpOnly: true}).json({user: encryptFetchingData(body)})
                     })

@@ -21,7 +21,7 @@
     "random-token": "0.0.8"
   },
   "scripts": {
-    "start": "nodemon server",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

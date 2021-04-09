@@ -29,7 +29,8 @@ passport.use('signup', new localStrategy({  usernameField: 'email', passwordFiel
         const emailExist = await UserModel.exists({email: email})
         if(emailExist) return done(null, false)
         else{
-            const user = await UserModel.create({ name: req.body.username , email: email, password: password, secret_token:generateToken(10), third_party: {is_third_party: false}, verification_code: generateToken(20) });
+            let profilePic = {filename: ["Template/1.png", "Template/2.png", "Template/3.png", "Template/4.png", "Template/5.png"][Math.floor(Math.random() * 5)]}
+            const user = await UserModel.create({ name: req.body.username , email: email, password: password, secret_token:generateToken(10), third_party: {is_third_party: false}, verification_code: generateToken(20), profile_picture: profilePic });
             return done(null, user);
         }
     } catch (error) {
