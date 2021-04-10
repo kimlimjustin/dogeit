@@ -265,6 +265,13 @@ body{
     border: 1px solid var(--white);
 }
 
+.topnav-subdogeit{
+    padding: .2rem 1rem;
+    margin: .1rem 8px !important;
+    border: 1px solid var(--yellow-color);
+    border-radius: 15px;
+}
+
 .auth-main-page{
     position: relative;
 }
@@ -341,7 +348,36 @@ body{
 #upload-profile-picture{
     display: none;
 }
+#subdogeit .modal-content{
+    width: 400px !important;
+}
+
+.subdogeits{
+    margin: 0 auto;
+    display: block;
+}
+
+.subdogeits a{
+    color: var(--yellow-color);
+    margin: 10px auto;
+    border: 1px solid var(--yellow-color);
+    border-radius: 15px;
+    padding: 10px;
+    text-decoration: none;
+    width: 250px;
+    display: block;
+    text-align: center;
+    transition: .5s;
+}
+
+.subdogeits a:hover{
+    background-color: var(--yellow-color);
+    color: var(--dark-color);
+}
 @media only screen and (max-width: 600px){
+    #subdogeit .modal-content{
+        width: initial !important;
+    }
     [class*="col-"]:not([class*="col-ex"]) {
 		width: 100% !important;
 	}
@@ -366,6 +402,15 @@ body{
     }
     .user-menu{
         padding: .2rem .5rem;
+    }
+    .topnav .topnav-brand{
+        margin: 0 5px 0 0 !important;
+    }
+    .topnav-logo{
+        margin: 0;
+    }
+    .subdogeits a{
+        width: auto;
     }
 }
 @media only screen and (min-width: 600px){

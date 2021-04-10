@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CryptoAES from "crypto-js/aes";
 import Crypto from "crypto-js";
+import { Link } from "react-router-dom";
 
 const SECURITY_KEY = process.env.REACT_APP_SECURITY_KEY;
 
@@ -15,7 +16,8 @@ const Navbar = ({userInfo}) => {
     const [newEmail, setNewEmail] = useState(userInfo.email);
     const [user, setUser] = useState('');
     const [inputFile, setInputFile] = useState("");
-    const [inputFileErr, setInputFileErr] = useState('')
+    const [inputFileErr, setInputFileErr] = useState('');
+    const [loc, setLoc] = useState('Home')
 
     useEffect(() => {
         setUser(userInfo)
@@ -63,6 +65,22 @@ const Navbar = ({userInfo}) => {
         }
     }
 
+    useEffect(() => {
+        if(window.location.pathname === "/"){
+            setLoc("Home")
+        }else if(window.location.pathname === "/r/popular"){
+            setLoc("Popular")
+        }
+    }, [])
+    const openSubdogeit = () => {
+        const modal = document.querySelector("#subdogeit");
+        modal.style.display = "block";
+        modal.querySelector(".modal-close-btn").addEventListener("click", () => modal.style.display = "none")
+        modal.addEventListener("click", e => {
+            if(e.target === modal) modal.style.display = "none"
+        })
+    }
+
     return(
         <>
             <div className="topnav topnav-shadow">
@@ -70,6 +88,9 @@ const Navbar = ({userInfo}) => {
                     <img src = "/logo512.png" className="topnav-logo" alt="Dogeit home page" />
                     <span className="topnav-desc">Dogeit</span>
                 </a>
+                {user?
+                <span className="topnav-subdogeit topnav-item" onClick = {openSubdogeit}>{loc}</span>
+                :null}
                 {user?
                 <div className="topnav-right">
                     <svg viewBox="0 0 20 20" className="topnav-item topnav-opt" onClick = {openSetting}>
@@ -89,6 +110,7 @@ const Navbar = ({userInfo}) => {
                 }
             </div>
             {user?
+            <>
                 <div className="modal" id="user-setting">
                     <div className="modal-content">
                         <span className="modal-close-btn">&times;</span>
@@ -123,6 +145,17 @@ const Navbar = ({userInfo}) => {
                         </div>
                     </div>
                 </div>
+                <div className="modal" id="subdogeit">
+                    <div className="modal-content">
+                        <span className="modal-close-btn">&times;</span>
+                        <h1 className="box-title">Dogeit Feeds</h1>
+                        <div className="subdogeits">
+                            <Link to = "/">Home</Link>
+                            <Link to = "/r/popular">Popular</Link>
+                        </div>
+                    </div>
+                </div>
+            </>
             :null}
         </>
     )
