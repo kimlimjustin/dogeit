@@ -136,7 +136,7 @@ body{
   position: absolute;
   width: 100%;
   height: 2px;
-  background: #1a73e8;
+  background: var(--yellow-color);
 }
 
 .form-animate, .input-animate{
@@ -373,6 +373,61 @@ body{
 .subdogeits a:hover{
     background-color: var(--yellow-color);
     color: var(--dark-color);
+}
+
+.topnav-feeds-icon{
+    width: 1rem;
+    fill: var(--yellow-color);
+    vertical-align: middle;
+    margin: 0 5px;
+}
+
+.mt-2{
+    margin-top: 2rem;
+}
+
+.m-05{
+    margin: .2rem .5rem;
+}
+
+input[type=radio] {
+    width: 16px;
+    height: 16px;
+    transition: all .4s;
+}
+  
+input[type=radio]:checked {
+    -webkit-animation: radio-animate .25s ease-out;
+    animation: radio-animate .25s ease-out;
+}
+  
+input[type=radio]:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.create-community-btn{
+    background-color: var(--yellow-color);
+}
+
+@keyframes radio-animate {
+    0% {
+      opacity: .4;
+      -webkit-transform: scale(3);
+      transform: scale(3);
+    }
+    10% {
+      -webkit-transform: scale(2.5);
+      transform: scale(2.5);
+    }
+    90% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+    100% {
+      -webkit-transform: none;
+      transform: none;
+    }
 }
 @media only screen and (max-width: 600px){
     #subdogeit .modal-content{

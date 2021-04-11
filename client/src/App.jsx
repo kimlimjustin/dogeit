@@ -12,6 +12,7 @@ import Recovery from "./Components/Auth/recovery";
 import Verify from "./Components/Auth/verify";
 
 import Navbar from "./Components/navbar";
+import CreateSubdogeit from "./Components/Subdogeit/create";
 
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
                 <Route exact path = "/" component = {(props) => <Home {...props} userInfo = {userInfo} />} />
                 <Route path = "/login" component = {(props) => <Login {...props} userInfo = {userInfo} />} />
                 <Route path = "/register" component = {(props) => <Register {...props} userInfo = {userInfo} />} />
+                <Route path = "/subdogeit/create" component = {(props) => <CreateSubdogeit {...props} userInfo = {userInfo} />} />
                 <Route path = "/verify" component = {Verify} />
                 <Route path = "/oauth" component = {OAuth} />
                 <Route path = "/logout" component = {Logout} />
