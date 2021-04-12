@@ -43,4 +43,19 @@ router.get('/get/:subdogeit', (req, res) => {
     })
 })
 
+router.get('/joined', (req, res) => {
+    if(req.headers.cookie){
+        let user =parseJwt(parseHeader(req.headers.cookie).value).user
+        User.findOne({email: user.email, name: user.name, secret_token: user.secret_token}, async (err, user) => {
+            if(err || !user) res.status(400).json({"message": "Unauthenticated"})
+            else{
+                Subdogeit.find({dogeitors: {"$in": [user._id]}})
+                .then(subdogeits => {
+                    res.json(subdogeits.map(subdogeit => subdogeit.name))
+                })
+            }
+        })
+    }else return res.status(400).json({"message": "Unauthenticated"})
+})
+
 module.exports = router

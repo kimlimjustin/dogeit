@@ -18,11 +18,14 @@ const Navbar = ({userInfo}) => {
     const [inputFile, setInputFile] = useState("");
     const [inputFileErr, setInputFileErr] = useState('');
     const [loc, setLoc] = useState('Home')
+    const [joinedSubdogeits, setJoinedSubdogeits] = useState([]);
 
     useEffect(() => {
         setUser(userInfo)
         if(userInfo){
             setInputFile(`${process.env.REACT_APP_SERVER_URL}/${userInfo.profile_picture.filename}`)
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/subdogeit/joined`, {withCredentials: true})
+            .then(subdogeits => setJoinedSubdogeits(subdogeits.data))
         }
     }, [userInfo])
 
@@ -155,6 +158,9 @@ const Navbar = ({userInfo}) => {
                         <div className="subdogeits">
                             <Link to = "/">Home</Link>
                             <Link to = "/r/popular">Popular</Link>
+                            {joinedSubdogeits.map(subdogeit =>{
+                                return <Link to = {`/r/${subdogeit}`} key={subdogeit}>/r/{subdogeit}</Link>
+                            })}
                             <Link to = "/subdogeit/create">Create Subdogeit</Link>
                         </div>
                     </div>
