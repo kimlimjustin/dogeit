@@ -19,19 +19,28 @@ const parseHeader = cookie => {
 router.post('/create', jsonParser, (req, res) => {
     if(req.headers.cookie){
         let user =parseJwt(parseHeader(req.headers.cookie).value).user
-        User.findOne({email: user.email, name: user.name, secret_token: user.secret_token}, (err, user) => {
+        User.findOne({email: user.email, name: user.name, secret_token: user.secret_token}, async (err, user) => {
             if(err || !user) res.status(400).json({"message": "Unauthenticated"})
             else{
-                const alrExist =  Subdogeit.exists({name: req.body.name.replace(/\s/, '-')})
+                const alrExist = await Subdogeit.exists({name: req.body.name.replace(/\s/, '-')})
                 if(alrExist) res.status(400).json({"status": "006"})
                 else{
-                    const newSubdogeit = new Subdogeit({name: req.body.name.replace(/\s/, '-'), description: req.body.description, community_type: "Public", admin: [user._id]})
+                    const newSubdogeit = new Subdogeit({name: req.body.name.replace(/\s/, '-'), description: req.body.description, community_type: "Public", admin: [user._id], dogeitors: [user._id]})
                     newSubdogeit.save()
                     .then(() => res.json({"message": "Success"}))
                 }
             }
         })
     }else return res.status(400).json({"message": "Unauthenticated"})
+})
+
+router.get('/get/:subdogeit', (req, res) => {
+    Subdogeit.findOne({name: req.params.subdogeit}, (err, subdogeit) => {
+        if(err || !subdogeit) res.status(404).json({"status": "404"})
+        else{
+            res.json(subdogeit)
+        }
+    })
 })
 
 module.exports = router

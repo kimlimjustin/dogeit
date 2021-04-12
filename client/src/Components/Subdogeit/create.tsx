@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 import encryptFetchingData from "../Lib/encryptFetchingData";
 
 interface Prop{
@@ -18,8 +18,9 @@ const CreateSubdogeit = (prop: Prop) => {
     const submitSubdogeit = (e: React.SyntheticEvent) => {
         e.preventDefault()
         axios.post(`${process.env.REACT_APP_SERVER_URL}/subdogeit/create`, {data: encryptFetchingData({name: inputCommunityDescription, description: inputCommunityDescription, community_type: inputCommunityType})}, {withCredentials: true})
-        .then(res => console.log(res))
+        .then(() => setRedirect(`/r/${inputCommunityName}`))
         .catch(err => {
+            console.log(err)
             if(err.response.data.status === "006"){
                 setErr(`${inputCommunityName} exists`)
             }else{
