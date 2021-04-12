@@ -42,8 +42,10 @@ app.use((req, res, next) => {
 })
 
 const USER_ROUTER = require('./Router/user.router');
+const SUBDOGEIT_ROUTER = require('./Router/subdogeit.router');
 
 app.use('/auth', USER_ROUTER);
+app.use('/subdogeit', SUBDOGEIT_ROUTER)
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server has started on port ${PORT}`))

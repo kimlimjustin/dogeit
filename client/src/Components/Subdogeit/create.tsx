@@ -1,15 +1,54 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router";
+import encryptFetchingData from "../Lib/encryptFetchingData";
 
-const CreateSubdogeit = () => {
+interface Prop{
+    main: string,
+    [key:string]: string
+}
+
+const CreateSubdogeit = (prop: Prop) => {
     const [inputCommunityName, setInputCommunityName] = useState('');
     const [inputCommunityDescription, setInputCommunityDescription] = useState('');
-    const [inputCommunityType, setinputCommunityType] = useState('Public')
-    const submitSubdogeit = () => {
-        
+    const [inputCommunityType, setinputCommunityType] = useState('Public');
+    const [redirect, setRedirect] = useState('');
+    const [err, setErr] = useState('')
+
+    const submitSubdogeit = (e: React.SyntheticEvent) => {
+        e.preventDefault()
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/subdogeit/create`, {data: encryptFetchingData({name: inputCommunityDescription, description: inputCommunityDescription, community_type: inputCommunityType})}, {withCredentials: true})
+        .then(res => console.log(res))
+        .catch(err => {
+            if(err.response.data.status === "006"){
+                setErr(`${inputCommunityName} exists`)
+            }else{
+                setErr("Something went wrong.")
+            }
+        })
     }
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+    useEffect(() => {
+        const checkVerified = async () =>{
+            delay(1000)
+            .then(() => {
+                if(prop.userInfo !== "" && !prop.userInfo){
+                    setRedirect('/')
+                }
+            })
+        }
+        checkVerified()
+    }, [prop])
+
+    useEffect(() =>{
+        setInputCommunityName(inputCommunityName.replace(/\s/, '-'))
+    },[inputCommunityName])
     return(
         <form className="container mt-2" onSubmit = {submitSubdogeit}>
+            {redirect?<Redirect to={redirect}></Redirect>:<></>}
             <h1 className="box-title">Create Community</h1>
+            <h3 className="form-error">{err}</h3>
             <div className="form-group form-animate">
                 <h3 className="form-label">Community Name:</h3>
                 <input type="text" className="input-animate" value = {inputCommunityName} onChange = {({target: {value}}) => setInputCommunityName(value)} required />
@@ -17,7 +56,7 @@ const CreateSubdogeit = () => {
             </div>
             <div className="form-group form-animate">
                 <h3 className="form-label">Community Description:</h3>
-                <textarea className="input-animate" required onChange = {({target: {defaultValue}}) => setInputCommunityDescription(defaultValue)}>{inputCommunityDescription}</textarea>
+                <textarea className="input-animate" required onChange = {({target: {value}}) => setInputCommunityDescription(value)} defaultValue = {inputCommunityDescription}></textarea>
                 <span className="input-onFocus"></span>
             </div>
             <div className="form-group">
