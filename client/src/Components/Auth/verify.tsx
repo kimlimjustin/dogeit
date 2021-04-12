@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { delay } from "../Lib/delay";
 import encryptFetchingData from "../Lib/encryptFetchingData";
 import parseQueryVariable from "../Lib/parseQueryVariable";
 
@@ -30,7 +31,6 @@ const Verify = (props: Prop) => {
 
     useEffect(() => console.log(error), [error])
 
-    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
     useEffect(() => {
         const Redirect = async () => {

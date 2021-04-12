@@ -115,7 +115,7 @@ router.post('/oauth', jsonParser, (req, res) => {
                         .then(avatarResponse => avatarResponse.data.pipe(writer))
                         .catch(err => console.log(err))
 
-                        const newUser = new User({email: userResponse.data.email, name: userResponse.data.login, password: generateToken(12), secret_token: secretToken, third_party: {is_third_party: true, provider: "GitHub", access_token: access_token}, verification_code: generateToken(20), profile_picture: {filename:`${secretToken}.png`}})
+                        const newUser = new User({email: userResponse.data.email, name: userResponse.data.login, password: generateToken(12), secret_token: secretToken, third_party: {is_third_party: true, provider: "GitHub", access_token: access_token}, verification_code: generateToken(20), profile_picture: {filename:`PROFILE_PICTURE_${secretToken}.png`}})
                         newUser.save()
                         .then(() => {
                             mailsocket.sendMail({from: `Dogeit <${process.env.mail_address}>`, to: newUser.email, subject: "Dogeit Email Verification", html: EmailVerification(newUser.verification_code)})

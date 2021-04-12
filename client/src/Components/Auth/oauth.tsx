@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { delay } from "../Lib/delay";
 import encryptFetchingData from "../Lib/encryptFetchingData";
 import parseQueryVariable from "../Lib/parseQueryVariable";
 
@@ -17,7 +18,6 @@ const OAuth = (props: Prop) => {
             const code = parseQueryVariable('code',props.location.search.toString())
             console.log(code)
             if(code && fetched === 0){
-                const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
                 axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/oauth`, {data: encryptFetchingData({code})}, {withCredentials: true})
                 .then(response => {
                     if(response) window.location.href = "/"
