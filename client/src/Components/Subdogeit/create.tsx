@@ -17,7 +17,7 @@ const CreateSubdogeit = (prop: Prop) => {
 
     const submitSubdogeit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/subdogeit/create`, {data: encryptFetchingData({name: inputCommunityDescription, description: inputCommunityDescription, community_type: inputCommunityType})}, {withCredentials: true})
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/subdogeit/create`, {data: encryptFetchingData({name: inputCommunityName, description: inputCommunityDescription, community_type: inputCommunityType})}, {withCredentials: true})
         .then(() => setRedirect(`/r/${inputCommunityName}`))
         .catch(err => {
             console.log(err)
@@ -43,7 +43,7 @@ const CreateSubdogeit = (prop: Prop) => {
     }, [prop])
 
     useEffect(() =>{
-        setInputCommunityName(inputCommunityName.replace(/\s/, '-'))
+        setInputCommunityName(inputCommunityName.replace(/\s/, '-').toLowerCase())
     },[inputCommunityName])
     return(
         <form className="container mt-2" onSubmit = {submitSubdogeit}>

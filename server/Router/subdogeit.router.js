@@ -25,7 +25,7 @@ router.post('/create', jsonParser, (req, res) => {
                 const alrExist = await Subdogeit.exists({name: req.body.name.replace(/\s/, '-')})
                 if(alrExist) res.status(400).json({"status": "006"})
                 else{
-                    const newSubdogeit = new Subdogeit({name: req.body.name.replace(/\s/, '-'), description: req.body.description, community_type: "Public", admin: [user._id], dogeitors: [user._id]})
+                    const newSubdogeit = new Subdogeit({name: req.body.name.replace(/\s/, '-').toLowerCase(), description: req.body.description, community_type: "Public", admin: [user._id], dogeitors: [user._id]})
                     newSubdogeit.save()
                     .then(() => res.json({"message": "Success"}))
                 }
