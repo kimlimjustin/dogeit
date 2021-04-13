@@ -1,9 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Banner from "./banner";
 
+interface Sub{
+    main: string,
+    [key:string]: string
+}
 
 const Subdogeit = (prop: {match: {params: {subdogeit: string}}, userInfo: string}) => {
-    const [subdogeit, setSubdogeit] = useState({});
+    const [subdogeit, setSubdogeit] = useState<Sub>();
 
     useEffect(() => {
         if(prop.match.params.subdogeit){
@@ -13,7 +18,7 @@ const Subdogeit = (prop: {match: {params: {subdogeit: string}}, userInfo: string
         }
     }, [prop])
     return(
-        <div></div>
+        <Banner subdogeit = {subdogeit} userInfo={prop.userInfo}></Banner>
     )
 }
 
