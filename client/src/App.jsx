@@ -42,7 +42,7 @@ const App = () => {
                 <Route path = "/oauth" component = {OAuth} />
                 <Route path = "/logout" component = {Logout} />
                 <Route path = "/recovery" component = {Recovery} />
-                <Route path = "/r/:subdogeit" component = {(props) => <Subdogeit {...props} />} />
+                <Route path = "/r/:subdogeit" component = {(props) => <Subdogeit {...props} userInfo = {userInfo} />} />
             </Switch>
         </Router>
     )

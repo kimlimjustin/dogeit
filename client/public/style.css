@@ -31,6 +31,11 @@ body{
     margin-right: auto;
 }
 
+.banner{
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .github-login-corner{
     position: absolute;
     top: -5rem;
@@ -136,7 +141,7 @@ body{
   position: absolute;
   width: 100%;
   height: 2px;
-  background: var(--yellow-color);
+  background: #8a830b;
 }
 
 .form-animate, .input-animate{
@@ -409,6 +414,45 @@ input[type=radio]:hover {
 .create-community-btn{
     background-color: var(--yellow-color);
 }
+.banner-container{
+    background-color: var(--yellow-color);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.banner-title{
+    margin: 5px;
+    color: rgb(10, 10, 10);
+}
+
+.banner-subdogeit{
+    margin: 5px;
+    color: rgb(63, 62, 62);
+    font-family: "Work";
+}
+
+.joined-btn, .join-btn{
+    background-color: inherit;
+    color: inherit;
+    border: 1px solid var(--dark-color);
+    border-radius: 20px;
+    font-size: 1rem;
+    padding: .5rem 1rem;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.joined-btn::after{
+    content: "Joined";
+}
+
+.join-btn::after{
+    content: "Join";
+}
+
+.joined-btn:hover .joined-btn::after{
+    content: "Leave"
+}
 
 @keyframes radio-animate {
     0% {
@@ -467,9 +511,13 @@ input[type=radio]:hover {
     .subdogeits a{
         width: auto;
     }
+    .banner{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
 @media only screen and (min-width: 600px){
-    .container{
+    .container, .banner{
         width: 550px;
     }
     .github-oauth-button{
@@ -478,18 +526,18 @@ input[type=radio]:hover {
 }
 
 @media only screen and (min-width: 768px){
-    .container{
+    .container, .banner{
         width: 730px;
     }
 }
 @media only screen and (min-width: 992px){
-    .container{
+    .container, .banner{
         width: 900px;
     }
 }
 
 @media only screen and (min-width: 1200px){
-    .container{
+    .container, .banner{
         width: 1130px;
     }
 }

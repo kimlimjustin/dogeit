@@ -58,4 +58,42 @@ router.get('/joined', (req, res) => {
     }else return res.status(400).json({"message": "Unauthenticated"})
 })
 
+router.post('/join', jsonParser, (req, res) =>{
+    if(req.headers.cookie){
+        let user =parseJwt(parseHeader(req.headers.cookie).value).user
+        User.findOne({email: user.email, name: user.name, secret_token: user.secret_token}, async (err, user) => {
+            if(err || !user) res.status(400).json({"message": "Unauthenticated"})
+            else{
+                Subdogeit.findOne({_id: req.body.subdogeit, name: req.body.name}, (err, subdogeit) => {
+                    if(err || !subdogeit) res.status(404).json({"message": "Subdogeit Not Found"})
+                    else{
+                        subdogeit.dogeitors.push(user._id)
+                        subdogeit.save()
+                        .then(() => res.json(subdogeit))
+                    }
+                })
+            }
+        })
+    }
+})
+
+router.post('/leave', jsonParser, (req, res) =>{
+    if(req.headers.cookie){
+        let user =parseJwt(parseHeader(req.headers.cookie).value).user
+        User.findOne({email: user.email, name: user.name, secret_token: user.secret_token}, async (err, user) => {
+            if(err || !user) res.status(400).json({"message": "Unauthenticated"})
+            else{
+                Subdogeit.findOne({_id: req.body.subdogeit, name: req.body.name}, (err, subdogeit) => {
+                    if(err || !subdogeit) res.status(404).json({"message": "Subdogeit Not Found"})
+                    else{
+                        subdogeit.dogeitors =  subdogeit.dogeitors.filter(value => String(value) !== String(user._id))
+                        subdogeit.save()
+                        .then(() => res.json(subdogeit))
+                    }
+                })
+            }
+        })
+    }
+})
+
 module.exports = router
