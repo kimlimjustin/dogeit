@@ -454,6 +454,12 @@ input[type=radio]:hover {
     content: "Leave"
 }
 
+.notFound{
+    color: #b92323;
+    text-align: center;
+    margin-top: 3rem;
+}
+
 @keyframes radio-animate {
     0% {
       opacity: .4;

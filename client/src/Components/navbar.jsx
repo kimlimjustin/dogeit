@@ -73,8 +73,10 @@ const Navbar = ({userInfo}) => {
             setLoc("Home")
         }else if(window.location.pathname === "/r/popular"){
             setLoc("Popular")
+        }else{
+            setLoc(window.location.pathname)
         }
-    }, [])
+    }, [window.location])
     const openSubdogeit = () => {
         const modal = document.querySelector("#subdogeit");
         modal.style.display = "block";
