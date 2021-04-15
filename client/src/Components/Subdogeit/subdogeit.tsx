@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Banner from "./banner";
 import FourZeroFour from "../Error/404";
+import Posts from "./posts";
+import About from "./about";
 
 const Subdogeit = (prop: {match: {params: {subdogeit: string}}, userInfo: string}) => {
     const [subdogeitData, setSubdogeit] = useState<any>();
@@ -26,7 +28,13 @@ const Subdogeit = (prop: {match: {params: {subdogeit: string}}, userInfo: string
         <>
         {notFound
             ?<FourZeroFour />
-            :<Banner subdogeit = {subdogeitData} userInfo={prop.userInfo}></Banner>
+            :<>
+                <Banner subdogeit = {subdogeitData} userInfo={prop.userInfo}></Banner>
+                <div className="container">
+                    <Posts />
+                    <About subdogeit={subdogeitData} />
+                </div>
+            </>
         }
         </>
     )

@@ -460,6 +460,39 @@ input[type=radio]:hover {
     margin-top: 3rem;
 }
 
+.posts{
+    width: 70%;
+    float: left;
+}
+
+.about{
+    width: 30%;
+    float: left;
+}
+
+.about-box{
+    background-color: var(--yellow-color);
+    margin: 1rem;
+    color: var(--dark-color);
+    padding: 1rem;
+    border-radius: .5rem;
+}
+
+.about-title{
+    color: #202124 !important;
+    margin: 0;
+    font-family: "Work";
+}
+
+.about-description{
+    margin: 1.2rem 0;
+}
+
+.about-box hr{
+    border: 1px solid #c2bd69;
+}
+
+
 @keyframes radio-animate {
     0% {
       opacity: .4;
@@ -480,6 +513,12 @@ input[type=radio]:hover {
     }
 }
 @media only screen and (max-width: 600px){
+    .posts{
+        width: 100%;
+    }
+    .about{
+        display: none;
+    }
     #subdogeit .modal-content{
         width: initial !important;
     }
