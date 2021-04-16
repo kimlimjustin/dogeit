@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CryptoAES from "crypto-js/aes";
 import Crypto from "crypto-js";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const SECURITY_KEY = process.env.REACT_APP_SECURITY_KEY;
 
@@ -12,6 +12,7 @@ const decryptFetchingData = (message) => {
 }
 
 const Navbar = ({userInfo}) => {
+    const history = useHistory()
     const [newUsername, setNewUsername] = useState(userInfo.name);
     const [newEmail, setNewEmail] = useState(userInfo.email);
     const [user, setUser] = useState('');
@@ -69,14 +70,17 @@ const Navbar = ({userInfo}) => {
     }
 
     useEffect(() => {
-        if(window.location.pathname === "/"){
-            setLoc("Home")
-        }else if(window.location.pathname === "/r/popular"){
-            setLoc("Popular")
-        }else{
-            setLoc(window.location.pathname)
-        }
-    }, [])
+        history.listen(loc => {
+            if(loc.pathname === "/"){
+                setLoc("Home")
+            }else if(loc === "/r/popular"){
+                setLoc("Popular")
+            }else{
+                setLoc(loc.pathname)
+            }
+        })
+      
+    }, [history])
     const openSubdogeit = () => {
         const modal = document.querySelector("#subdogeit");
         modal.style.display = "block";
