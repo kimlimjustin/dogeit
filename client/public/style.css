@@ -391,6 +391,10 @@ body{
     margin-top: 2rem;
 }
 
+.mt-1{
+    margin-top: 1rem;
+}
+
 .m-05{
     margin: .2rem .5rem;
 }
@@ -470,7 +474,7 @@ input[type=radio]:hover {
     float: left;
 }
 
-.about-box{
+.about-box, .create-post-box{
     background-color: var(--yellow-color);
     margin: 1rem;
     color: var(--dark-color);
@@ -490,6 +494,59 @@ input[type=radio]:hover {
 
 .about-box hr{
     border: 1px solid #c2bd69;
+}
+.create-post-input{
+    background-color: var(--dark-color);
+    border: none;
+    color: var(--white);
+}
+.create-post-input::placeholder{
+    color: var(--yellow-color);
+}
+
+.tab-btn{
+    width: 33.33%;
+    background-color: var(--dark-color);
+    color: var(--yellow-color);
+    border: 1px solid var(--yellow-color);
+}
+
+.create-post-box > .tab-content{
+    display: block;
+}
+
+.create-post-box > .tab-content ~ .tab-content{
+    display: none;
+}
+
+.tab-content{
+    margin-top: 1rem;
+}
+
+.input-file-box{
+    background-color: var(--dark-color);
+    margin-top: 1rem;
+    color: var(--white);
+    padding: 2rem;
+    border-radius: 5px;
+    text-align: center;
+    display: block;
+}
+
+.upload-btn{
+    display: inline-block;
+    padding: .5rem;
+    border-radius: .7rem;
+    background-color: var(--yellow-color);
+    color: var(--dark-color);
+}
+
+#input-file{
+    display: none;
+}
+
+.input-file-box input{
+    display: none;
 }
 
 

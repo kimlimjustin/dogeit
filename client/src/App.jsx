@@ -14,6 +14,7 @@ import Verify from "./Components/Auth/verify";
 import Navbar from "./Components/navbar";
 import CreateSubdogeit from "./Components/Subdogeit/create";
 import Subdogeit from "./Components/Subdogeit/subdogeit";
+import CreatePost from "./Components/Subdogeit/submit";
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
                 <Route path = "/oauth" component = {OAuth} />
                 <Route path = "/logout" component = {Logout} />
                 <Route path = "/recovery" component = {Recovery} />
+                <Route path = "/r/:subdogeit/submit" component = {(props) => <CreatePost {...props} userInfo = {userInfo} />} />
                 <Route path = "/r/:subdogeit" component = {(props) => <Subdogeit {...props} userInfo = {userInfo} />} />
             </Switch>
         </Router>
