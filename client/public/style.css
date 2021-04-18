@@ -549,6 +549,26 @@ input[type=radio]:hover {
     display: none;
 }
 
+.preview-btn{
+    background-color: var(--dark-color);
+    color: var(--yellow-color);
+}
+
+.preview, .submit-btn{
+    background-color: var(--dark-color);
+    color: var(--yellow-color);
+    padding: .5rem;
+    margin: 1rem 0;
+}
+
+.ml-1{
+    margin-left: 1rem;
+}
+
+.input-file{
+    width: 100%;
+    margin-top: 1rem;
+}
 
 @keyframes radio-animate {
     0% {
