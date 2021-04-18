@@ -220,15 +220,17 @@ router.post('/update_account', jsonParser, async (req, res) => {
             User.findOne({secret_token: user.secret_token, name: user.name, email: user.email}, (err, user) => {
                 if(err || !user) res.status(400).json("User not found.")
                 else{
-                    // Delete old proifle picture
-                    fs.unlink(__dirname + "/../Public/" +user.profile_picture.filename,  (err)=> {if(err)console.log(err)})
-                    // Write new Profile picture into disk
-                    const newAvatarName = `PROFILE_PICTURE_${generateToken(10)}.png`;
-                    const base64Data = req.body.pp.replace(/^data:image\/png;base64,/, "");
-                    fs.writeFile(`${__dirname}/../Public/${newAvatarName}`, base64Data, {encoding: 'base64'}, err => {if(err)console.log(err)})
+                    if(req.body.pp){
+                        // Delete old proifle picture
+                        fs.unlink(__dirname + "/../Public/" +user.profile_picture.filename,  (err)=> {if(err)console.log(err)})
+                        // Write new Profile picture into disk
+                        const newAvatarName = `PROFILE_PICTURE_${generateToken(10)}.png`;
+                        const base64Data = req.body.pp.replace(/^data:image\/png;base64,/, "");
+                        fs.writeFile(`${__dirname}/../Public/${newAvatarName}`, base64Data, {encoding: 'base64'}, err => {if(err)console.log(err)})
+                        user.profile_picture = {filename: newAvatarName}
+                    }
                     user.name = req.body.name
                     user.email = req.body.email
-                    user.profile_picture = {filename: newAvatarName}
                     user.save()
                     .then(() => {
                         const body = {_id: user._id, email: user.email, name: user.name, secret_token: user.secret_token, profile_picture: user.profile_picture};

@@ -45,7 +45,7 @@ const Navbar = ({userInfo}) => {
 
     const editAccount = e => {
         e.preventDefault()
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/update_account`, {data: encryptFetchingData({name: newUsername, email: newEmail, pp: inputFile})}, {withCredentials: true})
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/update_account`, {data: encryptFetchingData({name: newUsername, email: newEmail, pp: inputFile === `${process.env.REACT_APP_SERVER_URL}/${userInfo.profile_picture.filename}`? null: inputFile})}, {withCredentials: true})
         .then(res => {
             setUser(JSON.parse(decryptFetchingData(res.data.user)).data)
         })
