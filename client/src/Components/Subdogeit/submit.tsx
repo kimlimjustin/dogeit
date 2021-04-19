@@ -17,7 +17,7 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
     const [inputLink, setInputLink] = useState('')
     const [preview, setPreview] = useState(false);
     const [inputFileErr, setInputFileErr] = useState('');
-    const [previewImage, setPreviewImage] = useState('');
+    const [previewImage, setPreviewImage] = useState<Array<string>>([]);
 
     useEffect(() => {
         if (prop.match.params.subdogeit) {
@@ -56,10 +56,10 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
             .then(res => console.log(res))
     }
 
-    const uploadImage = (e: Event<HTMLInputElement>) =>{
-        if(e.target.files![0].size > 1048576){
+    const uploadImage = (e: Event<HTMLInputElement>) => {
+        if (e.target.files![0].size > 1048576) {
             setInputFileErr("File size should be less than 1MB.")
-        }else{
+        } else {
             setInputFileErr('')
             const img = new Image();
             const canvas = document.createElement("canvas");
@@ -68,10 +68,14 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
                 canvas.width = 900;
                 canvas.height = 900;
                 ctx!.drawImage(img, 0, 0, 900, 900)
-                setPreviewImage(canvas.toDataURL())
+                setPreviewImage([...previewImage, canvas.toDataURL()])
             }
             img.src = URL.createObjectURL(e.target.files![0])
         }
+    }
+
+    const removeImage = (img:string) => {
+        setPreviewImage(previewImage.filter(image => image !== img))
     }
 
     return (
@@ -97,15 +101,26 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
                             </div>
                             <div className="tab-content" id="image">
                                 <input type="text" placeholder="Title" className="form-control create-post-input" value={inputTitle} onChange={({ target: { value } }) => setInputTitle(value)} />
-                                {!previewImage ?
+                                {!previewImage.length ?
                                     <>
                                         <label className="input-file-box" htmlFor="input-file">
                                             Drag and drop images or <span className="upload-btn">Upload</span>
                                         </label>
-                                        <input type="file" id="input-file" accept="image/png,image/gif,image/jpeg,video/mp4,video/quicktime" onChange = {uploadImage} />
+                                        <input type="file" id="input-file" accept="image/png,image/gif,image/jpeg,video/mp4,video/quicktime" onChange={uploadImage} />
                                     </>
                                     :
-                                    <img src={previewImage} alt={inputTitle} className="input-file" />
+                                    <>
+                                        {previewImage.map(img => {
+                                            return  <div className='input-file'>
+                                                <img src={img} alt={inputTitle} key = {img} />
+                                                <span className="remove-image" onClick = {() => removeImage(img)}>&times;</span>
+                                            </div>
+                                        })}
+                                        <label className="add-file-box btn form-control" htmlFor="input-file">
+                                            Add images
+                                        </label>
+                                        <input type="file" id="input-file" accept="image/png,image/gif,image/jpeg,video/mp4,video/quicktime" onChange={uploadImage} />
+                                    </>
                                 }
                                 <button className="btn form-control submit-btn" onClick={() => submitImage()}>Submit</button>
                             </div>

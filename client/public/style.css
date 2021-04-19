@@ -566,8 +566,29 @@ input[type=radio]:hover {
 }
 
 .input-file{
+    width: calc(33.33% - 2rem);
+    margin: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.input-file img{
     width: 100%;
-    margin-top: 1rem;
+}
+
+.remove-image{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.add-file-box{
+    background-color: var(--dark-color);
+    color: var(--yellow-color);
+    display: block;
+    text-align: center;
 }
 
 @keyframes radio-animate {
