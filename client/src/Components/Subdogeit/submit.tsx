@@ -18,6 +18,8 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
     const [preview, setPreview] = useState(false);
     const [inputFileErr, setInputFileErr] = useState('');
     const [previewImage, setPreviewImage] = useState<Array<string>>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (prop.match.params.subdogeit) {
@@ -42,18 +44,45 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
     }
 
     const submitPost = () => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/post/create`, { data: encryptFetchingData({ title: inputTitle, body: inputText, type: "post", subdogeit: subdogeitData._id }) }, { withCredentials: true })
-            .then(res => console.log(res))
+        if(!inputTitle){
+            setError("Title is required.")
+        }
+        else if (!isLoading) {
+            setIsLoading(true)
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/post/create`, { data: encryptFetchingData({ title: inputTitle, body: inputText, type: "post", subdogeit: subdogeitData._id }) }, { withCredentials: true })
+                .then((res: any) => {
+                    setIsLoading(false)
+                    window.location.href = `/r/${subdogeitData.name}/posts/${res?.data?.url}`
+                })
+        }
     }
 
     const submitLink = () => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/post/create`, { data: encryptFetchingData({ title: inputTitle, link: inputLink, type: "link", subdogeit: subdogeitData._id }) }, { withCredentials: true })
-            .then(res => console.log(res))
+        if(!inputTitle){
+            setError("Title is required.")
+        }
+        else if (!isLoading) {
+            setIsLoading(true)
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/post/create`, { data: encryptFetchingData({ title: inputTitle, link: inputLink, type: "link", subdogeit: subdogeitData._id }) }, { withCredentials: true })
+                .then((res: any) => {
+                    setIsLoading(false)
+                    window.location.href = `/r/${subdogeitData.name}/posts/${res?.data?.url}`
+                })
+        }
     }
 
     const submitImage = () => {
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/post/create`, { data: encryptFetchingData({ title: inputTitle, image: previewImage, type: "image", subdogeit: subdogeitData._id }) }, { withCredentials: true })
-            .then(res => console.log(res))
+        if(!inputTitle){
+            setError("Title is required.")
+        }
+        else if (!isLoading) {
+            setIsLoading(true)
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/post/create`, { data: encryptFetchingData({ title: inputTitle, image: previewImage, type: "image", subdogeit: subdogeitData._id }) }, { withCredentials: true })
+                .then((res: any) => {
+                    setIsLoading(false)
+                    window.location.href = `/r/${subdogeitData.name}/posts/${res?.data?.url}`
+                })
+        }
     }
 
     const uploadImage = (e: Event<HTMLInputElement>) => {
@@ -74,7 +103,7 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
         }
     }
 
-    const removeImage = (img:string) => {
+    const removeImage = (img: string) => {
         setPreviewImage(previewImage.filter(image => image !== img))
     }
 
@@ -84,6 +113,7 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
                 <div className="container">
                     <h1 className="box-title mt-2">Create a post</h1>
                     <h4 className="form-error">{inputFileErr}</h4>
+                    <h4 className="form-error">{error}</h4>
                     <div className="posts">
                         <div className="create-post-box">
                             <div className="tab">
@@ -111,9 +141,9 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
                                     :
                                     <>
                                         {previewImage.map(img => {
-                                            return  <div className='input-file'>
-                                                <img src={img} alt={inputTitle} key = {img} />
-                                                <span className="remove-image" onClick = {() => removeImage(img)}>&times;</span>
+                                            return <div className='input-file' key={img}>
+                                                <img src={img} alt={inputTitle} />
+                                                <span className="remove-image" onClick={() => removeImage(img)}>&times;</span>
                                             </div>
                                         })}
                                         <label className="add-file-box btn form-control" htmlFor="input-file">
