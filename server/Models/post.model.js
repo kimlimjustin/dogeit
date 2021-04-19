@@ -30,6 +30,22 @@ const PostSchema = new Schema({
     subdogeit: {
         type: String,
         required: true
+    },
+    laughs: {
+        type: [Schema.Types.ObjectId],
+        default: []
+    },
+    cries: {
+        type: [Schema.Types.ObjectId],
+        default: []
+    },
+    mads: {
+        type: [Schema.Types.ObjectId],
+        default: []
+    },
+    creator: {
+        type: Schema.Types.ObjectId,
+        required: true
     }
 }, {
     timestamps: true

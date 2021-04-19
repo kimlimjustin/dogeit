@@ -591,6 +591,42 @@ input[type=radio]:hover {
     text-align: center;
 }
 
+.post-box{
+    margin: 1rem;
+    background-color: var(--yellow-color);
+    color: var(--dark-color);
+    border-radius: .5rem;
+    padding: 1rem;
+}
+
+.post-box h2{
+    margin: 0 0 1rem 0;
+}
+
+.post-box img{
+    width: 100%;
+}
+
+.post-info{
+    margin: 0 0 1rem 0;
+    color: #72767f;
+}
+.post-link{
+    color: inherit;
+}
+
+.post-link::after{
+    content: url("./Icon/link.svg");
+    width: 1rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 0 5px;
+}
+
+.markdown-texts img{
+    max-width: 100%;
+}
+
 @keyframes radio-animate {
     0% {
       opacity: .4;

@@ -34,17 +34,17 @@ router.post('/create', jsonParser, (req, res) => {
                     else {
                         if (req.body.type === "post") {
                             const url = req.body.title.replace(/\s/, '-').toLowerCase() + '-' + generateToken(5)
-                            const post = new Post({ title: req.body.title, url, subdogeit: subdogeit._id, type: "post", body: req.body.body })
+                            const post = new Post({ title: req.body.title, url, subdogeit: subdogeit._id, type: "post", body: req.body.body, creator: user._id })
                             post.save()
                                 .then(() => res.json({ "message": "Success", url }))
                         } else if (req.body.type === "link") {
                             const url = req.body.title.replace(/\s/, '-').toLowerCase() + '-' + generateToken(5)
-                            const post = new Post({ title: req.body.title, url, subdogeit: subdogeit._id, type: "link", link: req.body.link })
+                            const post = new Post({ title: req.body.title, url, subdogeit: subdogeit._id, type: "link", link: req.body.link, creator: user._id })
                             post.save()
                                 .then(() => res.json({ "message": "Success", url }))
                         } else if (req.body.type === "image") {
                             const url = req.body.title.replace(/\s/, '-').toLowerCase() + '-' + generateToken(5)
-                            const post = new Post({ title: req.body.title, url, subdogeit: subdogeit._id, type: "image", link: req.body.link, image: [] })
+                            const post = new Post({ title: req.body.title, url, subdogeit: subdogeit._id, type: "image", link: req.body.link, image: [], creator: user._id })
                             req.body.image.forEach(img => {
                                 let newAvatarName = `POST_IMAGE_${generateToken(10)}.png`;
                                 let base64Data = img.replace(/^data:image\/png;base64,/, "");
@@ -59,6 +59,20 @@ router.post('/create', jsonParser, (req, res) => {
             }
         })
     } else res.status(400).json({ "message": "Unauthorized" })
+})
+
+router.get("/get/:url", (req, res) => {
+    Post.findOne({ url: req.params.url }, (err, post) => {
+        if (err || !post) res.status(404).json({ "message": "Post not found." })
+        else {
+            User.findOne({_id: post.creator}, (err, user) => {
+                if (err || !user) res.status(404).json({ "message": "User not found." })
+                else{
+                    res.json({post, creator: {_id: user._id, name: user.name}})
+                }
+            })
+        }
+    })
 })
 
 module.exports = router;
