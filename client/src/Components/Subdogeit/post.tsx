@@ -16,7 +16,7 @@ const Post = (prop: { match: { params: { subdogeit: string, post: string } }, us
         if (prop.match.params.subdogeit) {
             axios.get(`${process.env.REACT_APP_SERVER_URL}/subdogeit/get/${prop.match.params.subdogeit}`)
                 .then(res => {
-                    setSubdogeit(res.data)
+                    setSubdogeit(res.data.subdogeit)
                     setNotFound(false)
                     if(prop.match.params.post){
                         axios.get(`${process.env.REACT_APP_SERVER_URL}/post/get/${prop.match.params.post}`)

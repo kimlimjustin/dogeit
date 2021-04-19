@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const User = require('../Models/user.model');
 const Subdogeit = require('../Models/subdogeit.model');
+const Post = require("../Models/post.model");
 
 const parseJwt = token => {
     const base64Url = token.split('.')[1];
@@ -38,7 +39,10 @@ router.get('/get/:subdogeit', (req, res) => {
     Subdogeit.findOne({name: req.params.subdogeit}, (err, subdogeit) => {
         if(err || !subdogeit) res.status(404).json({"status": "404"})
         else{
-            res.json(subdogeit)
+            Post.find({subdogeit: subdogeit._id})
+            .then(posts => {
+                res.json({subdogeit, posts})
+            })
         }
     })
 })

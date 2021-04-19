@@ -599,7 +599,7 @@ input[type=radio]:hover {
     padding: 1rem;
 }
 
-.post-box h2{
+.post-box h2, .post-box h3{
     margin: 0 0 1rem 0;
 }
 
@@ -625,6 +625,18 @@ input[type=radio]:hover {
 
 .markdown-texts img{
     max-width: 100%;
+}
+
+.link-to-post{
+    text-decoration: none;
+}
+
+.limit-height{
+    overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 5;
+   -webkit-box-orient: vertical;
 }
 
 @keyframes radio-animate {
