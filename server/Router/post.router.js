@@ -75,4 +75,64 @@ router.get("/get/:url", (req, res) => {
     })
 })
 
+router.post('/cry', jsonParser, (req, res) => {
+    Post.findOne({url: req.body.url}, (err, post) => {
+        if(err || !post) res.status(404).json({"message": "Post not found."})
+        else{
+            if (req.headers.cookie) {
+                let user = parseJwt(parseHeader(req.headers.cookie).value).user
+                User.findOne({ email: user.email, name: user.name, secret_token: user.secret_token }, async (err, user) => {
+                    if (err || !user) res.status(400).json({ "message": "Unauthenticated" })
+                    else {
+                        if(post.cries.indexOf(String(user._id)) === -1) post.cries.push(user._id)
+                        else post.cries =  post.cries.filter(id => String(id) !== String(user._id))
+                        post.save()
+                        .then(() => res.json({"message": "Success"}))
+                    }
+                })
+            } else res.status(400).json({ "message": "Unauthorized" })
+        }
+    })
+})
+
+router.post('/laugh', jsonParser, (req, res) => {
+    Post.findOne({url: req.body.url}, (err, post) => {
+        if(err || !post) res.status(404).json({"message": "Post not found."})
+        else{
+            if (req.headers.cookie) {
+                let user = parseJwt(parseHeader(req.headers.cookie).value).user
+                User.findOne({ email: user.email, name: user.name, secret_token: user.secret_token }, async (err, user) => {
+                    if (err || !user) res.status(400).json({ "message": "Unauthenticated" })
+                    else {
+                        if(post.laughs.indexOf(String(user._id)) === -1) post.laughs.push(user._id)
+                        else post.lauhgs =  post.laughs.filter(id => String(id) !== String(user._id))
+                        post.save()
+                        .then(() => res.json({"message": "Success"}))
+                    }
+                })
+            } else res.status(400).json({ "message": "Unauthorized" })
+        }
+    })
+})
+
+router.post('/mad', jsonParser, (req, res) => {
+    Post.findOne({url: req.body.url}, (err, post) => {
+        if(err || !post) res.status(404).json({"message": "Post not found."})
+        else{
+            if (req.headers.cookie) {
+                let user = parseJwt(parseHeader(req.headers.cookie).value).user
+                User.findOne({ email: user.email, name: user.name, secret_token: user.secret_token }, async (err, user) => {
+                    if (err || !user) res.status(400).json({ "message": "Unauthenticated" })
+                    else {
+                        if(post.mads.indexOf(String(user._id)) === -1) post.mads.push(user._id)
+                        else post.mads =  post.mads.filter(id => String(id) !== String(user._id))
+                        post.save()
+                        .then(() => res.json({"message": "Success"}))
+                    }
+                })
+            } else res.status(400).json({ "message": "Unauthorized" })
+        }
+    })
+})
+
 module.exports = router;

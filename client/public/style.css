@@ -639,6 +639,33 @@ input[type=radio]:hover {
    -webkit-box-orient: vertical;
 }
 
+.post-expressions{
+    position: fixed;
+    bottom: 0;
+    background-color: var(--yellow-color);
+    border-radius: 1rem 1rem 0 0;
+    margin: auto;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.post-expression{
+    width: 4rem;
+    height: 4rem;
+    display: inline-block;
+    margin: .5rem;
+    border: .2rem solid var(--dark-color);
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.expressed{
+    filter: grayscale(100%);
+    -webkit-filter: sepia(5);
+    filter: sepia(5);
+    border: .2rem solid #a09a43 !important;
+}
+
 @keyframes radio-animate {
     0% {
       opacity: .4;

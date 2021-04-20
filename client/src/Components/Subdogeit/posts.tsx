@@ -1,5 +1,4 @@
 import { useEffect } from "react"
-import ReactMarkdown from "react-markdown"
 import { Link } from "react-router-dom"
 
 const Posts = ({ subdogeit, posts }: any) => {
