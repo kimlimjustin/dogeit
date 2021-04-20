@@ -25,7 +25,7 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
         if (prop.match.params.subdogeit) {
             axios.get(`${process.env.REACT_APP_SERVER_URL}/subdogeit/get/${prop.match.params.subdogeit}`)
                 .then(res => {
-                    setSubdogeit(res.data)
+                    setSubdogeit(res.data.subdogeit)
                     setNotFound(false)
                 })
                 .catch(err => {
@@ -48,11 +48,15 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
             setError("Title is required.")
         }
         else if (!isLoading) {
-            setIsLoading(true)
+            console.log(subdogeitData)
             axios.post(`${process.env.REACT_APP_SERVER_URL}/post/create`, { data: encryptFetchingData({ title: inputTitle, body: inputText, type: "post", subdogeit: subdogeitData._id }) }, { withCredentials: true })
                 .then((res: any) => {
                     setIsLoading(false)
                     window.location.href = `/r/${subdogeitData.name}/posts/${res?.data?.url}`
+                })
+                .catch(() =>{
+                    setError("Something went wrong. Please try again")
+                    setIsLoading(false)
                 })
         }
     }
@@ -68,6 +72,10 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
                     setIsLoading(false)
                     window.location.href = `/r/${subdogeitData.name}/posts/${res?.data?.url}`
                 })
+                .catch(() =>{
+                    setError("Something went wrong. Please try again")
+                    setIsLoading(false)
+                })
         }
     }
 
@@ -81,6 +89,10 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
                 .then((res: any) => {
                     setIsLoading(false)
                     window.location.href = `/r/${subdogeitData.name}/posts/${res?.data?.url}`
+                })
+                .catch(() =>{
+                    setError("Something went wrong. Please try again")
+                    setIsLoading(false)
                 })
         }
     }
