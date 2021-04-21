@@ -135,4 +135,9 @@ router.post('/mad', jsonParser, (req, res) => {
     })
 })
 
+router.get('/all', (req, res) => {
+    Post.find().limit(100).sort({_id: -1})
+    .then(posts => res.json(posts))
+})
+
 module.exports = router;

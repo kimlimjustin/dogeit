@@ -16,6 +16,7 @@ import CreateSubdogeit from "./Components/Subdogeit/create";
 import Subdogeit from "./Components/Subdogeit/subdogeit";
 import CreatePost from "./Components/Subdogeit/submit";
 import Post from "./Components/Subdogeit/post";
+import Popular from "./Components/Subdogeit/popular";
 
 
 const App = () => {
@@ -44,6 +45,8 @@ const App = () => {
                 <Route path = "/oauth" component = {OAuth} />
                 <Route path = "/logout" component = {Logout} />
                 <Route path = "/recovery" component = {Recovery} />
+                <Route path = "/r/popular/posts/:post" component = {(props) => <Post {...props} userInfo = {userInfo} />} />
+                <Route path = "/r/popular" component = {(props) => <Popular {...props} userInfo = {userInfo} />} />
                 <Route path = "/r/:subdogeit/posts/:post" component = {(props) => <Post {...props} userInfo = {userInfo} />} />
                 <Route path = "/r/:subdogeit/submit" component = {(props) => <CreatePost {...props} userInfo = {userInfo} />} />
                 <Route path = "/r/:subdogeit" component = {(props) => <Subdogeit {...props} userInfo = {userInfo} />} />

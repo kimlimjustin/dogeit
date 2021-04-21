@@ -22,8 +22,21 @@ const Banner = ({subdogeit, userInfo}: any) => {
     return(
         <div className="banner-container">
             <div className="banner">
-                <h1 className="banner-title">{info?.description} <>{info?.dogeitors.indexOf(user._id) !== -1? <button className="joined-btn" onClick = {() =>Leave()}></button>:<button className="join-btn" onClick = {() => Join()}></button>}</></h1>
-                <h3 className="banner-subdogeit">/r/{info?.name}</h3>
+                {subdogeit?
+                <>
+                    <h1 className="banner-title">{info?.description} <>{info?.dogeitors.indexOf(user._id) !== -1? <button className="joined-btn" onClick = {() =>Leave()}></button>:<button className="join-btn" onClick = {() => Join()}></button>}</></h1>
+                    <h3 className="banner-subdogeit">/r/{info?.name}</h3>
+                </>
+                :
+                String(window.location.pathname.split("/").slice(0,3).join("/")) === "/r/popular"?
+                <>
+                    <h1 className="banner-title">Popular</h1>
+                    <h3 className="banner-subdogeit">/r/popular</h3>
+                </>
+                :
+                <>
+                </>
+                }
             </div>
         </div>
     )

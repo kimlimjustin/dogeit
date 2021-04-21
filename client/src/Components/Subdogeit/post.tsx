@@ -22,32 +22,32 @@ const Post = (prop: { match: { params: { subdogeit: string, post: string } }, us
                 .then(res => {
                     setSubdogeit(res.data.subdogeit)
                     setNotFound(false)
-                    if(prop.match.params.post){
-                        axios.get(`${process.env.REACT_APP_SERVER_URL}/post/get/${prop.match.params.post}`)
-                        .then(res => {
-                            setPostData(res.data.post)
-                            setCreatorData(res.data.creator)
-                            setNotFound(false)
-                            if(res.data.post.cries.indexOf(prop.userInfo._id) === -1) setCried(false)
-                            else setCried(true)
-                            if(res.data.post.laughs.indexOf(prop.userInfo._id) === -1) setLaughed(false)
-                            else setLaughed(true)
-                            if(res.data.post.mads.indexOf(prop.userInfo._id) === -1) setMadded(false)
-                            else setMadded(true)
-                        })
-                        .catch(err => {
-                            console.log(err)
-                            if(String(err.response.status) === "404"){
-                                setNotFound(true)
-                            }
-                        })
-                    }
                 })
                 .catch(err => {
                     if (String(err.response.status) === "404") {
                         setNotFound(true)
                     }
                 })
+        }
+        if(prop.match.params.post){
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/post/get/${prop.match.params.post}`)
+            .then(res => {
+                setPostData(res.data.post)
+                setCreatorData(res.data.creator)
+                setNotFound(false)
+                if(res.data.post.cries.indexOf(prop.userInfo._id) === -1) setCried(false)
+                else setCried(true)
+                if(res.data.post.laughs.indexOf(prop.userInfo._id) === -1) setLaughed(false)
+                else setLaughed(true)
+                if(res.data.post.mads.indexOf(prop.userInfo._id) === -1) setMadded(false)
+                else setMadded(true)
+            })
+            .catch(err => {
+                console.log(err)
+                if(String(err.response.status) === "404"){
+                    setNotFound(true)
+                }
+            })
         }
     }, [prop])
 
