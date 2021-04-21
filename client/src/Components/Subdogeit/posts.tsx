@@ -1,8 +1,6 @@
-import { useEffect } from "react"
 import { Link } from "react-router-dom"
 
 const Posts = ({ subdogeit, posts }: any) => {
-    useEffect(() => console.log(posts), [posts])
     return (
         <div className="posts">
             <div className="create-post-box">

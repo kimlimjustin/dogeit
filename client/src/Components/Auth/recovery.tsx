@@ -20,6 +20,7 @@ const Recovery = (props: Prop) => {
     const [inputConfirmation, setConfirmation] = useState('');
     const [resetPassErr, setResetPassErr] = useState('');
     const [done, setDone] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const RecoverAccount = (e: React.SyntheticEvent) => {
         e.preventDefault()
@@ -66,12 +67,17 @@ const Recovery = (props: Prop) => {
 
     const ResetPass = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        if(inputPassword === inputConfirmation){
+        if(inputPassword === inputConfirmation && !loading){
+            setLoading(true)
             axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/recover_password`, {data: encryptFetchingData({token, pass:inputPassword})}, {withCredentials: true})
-            .then(res => setDone(true))
+            .then(res =>{
+                setDone(true)
+                setLoading(false)
+            })
             .catch(err => {
                 if(err.response.data.status === "004"){
                     setResetPassErr("Invalid ip address")
+                    setLoading(false)
                 }
             })
         }

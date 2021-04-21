@@ -15,15 +15,8 @@ const Subdogeit = (prop: { match: { params: { subdogeit: string } }, userInfo: s
             axios.get(`${process.env.REACT_APP_SERVER_URL}/subdogeit/get/${prop.match.params.subdogeit}`)
                 .then(res => {
                     setSubdogeit(res.data.subdogeit)
-                    res.data.posts.forEach((post:any) => {
-                        console.log(Date.now(), new Date(post.createdAt))
-                        console.log(new Date(post.createdAt).getTime())
-                    })
-                    setPosts(res.data.posts.sort((a:any, b:any) => {
-                        const countScore = (src:any) => (src.cries + src.mads + src.cries) - (Date.now() - new Date(src.createdAt).getTime())
-                        if(countScore(a) > countScore(b)) return -1
-                        else return 1
-                    }))
+                    const countScore = (src:any) => (src.cries + src.mads + src.cries) - ((Date.now() - new Date(src.createdAt).getTime()) / 100)
+                    setPosts(res.data.posts.sort((a:any, b:any) => countScore(a) > countScore(b) ? 1 : -1))
                     setNotFound(false)
                 })
                 .catch(err => {
