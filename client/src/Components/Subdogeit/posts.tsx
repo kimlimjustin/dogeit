@@ -3,9 +3,10 @@ import { Link } from "react-router-dom"
 const Posts = ({ subdogeit, posts }: any) => {
     return (
         <div className="posts">
+            {window.location.pathname === "/" || window.location.pathname === "/r/popular"?<></>:
             <div className="create-post-box">
                 <input type="text" className="create-post-input form-control" placeholder="Create a post" onFocus={() => window.location.href = `/r/${subdogeit.name}/submit`} />
-            </div>
+            </div>}
             {posts.map((post:any) => {
                 return <Link key = {post._id} to = {`/r/${subdogeit.name}/posts/${post.url}`} className="link-to-post">
                     <div className="post-box">
