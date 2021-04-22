@@ -37,7 +37,7 @@ const Home = (prop: {userInfo: any}) => {
                 })}
                 </div>
                 <Posts posts={posts} />
-                <About />
+                <About isAdmin = {false} />
             </div>
         </>
     )

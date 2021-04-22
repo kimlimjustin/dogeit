@@ -103,4 +103,27 @@ router.post('/leave', jsonParser, (req, res) =>{
     }
 })
 
+router.post('/update', jsonParser, (req, res) => {
+    if(req.headers.cookie){
+        let user =parseJwt(parseHeader(req.headers.cookie).value).user
+        User.findOne({email: user.email, name: user.name, secret_token: user.secret_token}, async (err, user) => {
+            if(err || !user) res.status(400).json({"message": "Unauthenticated"})
+            else{
+                Subdogeit.findOne({_id: req.body.subdogeit}, (err, subdogeit) => {
+                    if(err || !subdogeit) res.status(404).json({"message": "Subdogeit not found."})
+                    else{
+                        if(String(subdogeit.admin[0]) !== String(user._id)) res.status(405).json({"message": "Unauthenticated"})
+                        else{
+                            subdogeit.description = req.body.description
+                            subdogeit.community_type = req.body.community_type
+                            subdogeit.save()
+                            .then(() => res.json({"message": "Success"}))
+                        }
+                    }
+                })
+            }
+        })
+    }
+})
+
 module.exports = router

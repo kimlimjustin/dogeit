@@ -11,6 +11,7 @@ const Subdogeit = (prop: { match: { params: { subdogeit: string } }, userInfo: s
     const [posts, setPosts] = useState<Array<any>>([]);
     const [notFound, setNotFound] = useState<boolean>(false);
     const [notAllowed, setNotAllowed] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         if (prop.match.params.subdogeit) {
@@ -18,6 +19,7 @@ const Subdogeit = (prop: { match: { params: { subdogeit: string } }, userInfo: s
                 .then(res => {
                     if (!(res.data.subdogeit.community_type === "Private" && !res.data.isAdmin)) {
                         setSubdogeit(res.data.subdogeit)
+                        setIsAdmin(res.data.isAdmin)
                         const countScore = (src: any) => (src.cries + src.mads + src.cries) - ((Date.now() - new Date(src.createdAt).getTime()) / 100)
                         setPosts(res.data.posts.sort((a: any, b: any) => countScore(a) > countScore(b) ? 1 : -1))
                         setNotFound(false)
@@ -42,7 +44,7 @@ const Subdogeit = (prop: { match: { params: { subdogeit: string } }, userInfo: s
                         <Banner subdogeit={subdogeitData} userInfo={prop.userInfo}></Banner>
                         <div className="container">
                             <Posts subdogeit={subdogeitData} posts={posts} />
-                            <About subdogeit={subdogeitData} />
+                            <About subdogeit={subdogeitData} isAdmin = {isAdmin} />
                         </div>
                     </>
             }

@@ -19,7 +19,7 @@ const Popular = (prop: { userInfo: string }) => {
             <Banner userInfo = {prop.userInfo} />
             <div className="container">
                 <Posts posts={posts} subdogeit = {{name: "popular"}} />
-                <About />
+                <About isAdmin = {false} />
             </div>
         </>
     )

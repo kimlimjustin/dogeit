@@ -1,5 +1,6 @@
 import moment from "moment";
-const About = ({subdogeit}: {subdogeit?: any}) => {
+import { Link } from "react-router-dom";
+const About = ({subdogeit, isAdmin}: {subdogeit?: any, isAdmin: boolean}) => {
     return(
         <div className="about">
             {window.location.pathname === "/" ?<></>
@@ -12,6 +13,9 @@ const About = ({subdogeit}: {subdogeit?: any}) => {
                     <hr/>
                     <p>Created {moment(subdogeit?.createdAt).format("Do MMMM YYYY")}</p>
                 </>}
+                {isAdmin?
+                    <Link className="btn setting-btn" to={`/r/${subdogeit?.name}/setting`}>Setting</Link>
+                :<></>}
             </div>
             }
             <div className="about-box">

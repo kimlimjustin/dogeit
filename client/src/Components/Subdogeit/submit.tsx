@@ -4,6 +4,7 @@ import FourZeroFour from "../Error/404";
 import About from "./about"
 import ReactMarkdown from "react-markdown";
 import encryptFetchingData from "../Lib/encryptFetchingData";
+import FourZeroFive from "../Error/405";
 
 interface Event<T = EventTarget> {
     target: T;
@@ -20,13 +21,18 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
     const [previewImage, setPreviewImage] = useState<Array<string>>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [notAllowed, setNotAllowed] = useState<boolean>(false);
 
     useEffect(() => {
         if (prop.match.params.subdogeit) {
-            axios.get(`${process.env.REACT_APP_SERVER_URL}/subdogeit/get/${prop.match.params.subdogeit}`)
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/subdogeit/get/${prop.match.params.subdogeit}`, {withCredentials: true})
                 .then(res => {
-                    setSubdogeit(res.data.subdogeit)
-                    setNotFound(false)
+                    if (!(res.data.subdogeit.community_type === "Private" && !res.data.isAdmin)) {
+                        setIsAdmin(res.data.isAdmin)
+                        setSubdogeit(res.data.subdogeit)
+                        setNotFound(false)
+                    } else setNotAllowed(true)
                 })
                 .catch(err => {
                     if (String(err.response.status) === "404") {
@@ -121,7 +127,9 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
 
     return (
         <>
-            {!notFound ?
+        {notAllowed
+            ? <FourZeroFive />
+            : !notFound ?
                 <div className="container">
                     <h1 className="box-title mt-2">Create a post</h1>
                     <h4 className="form-error">{inputFileErr}</h4>
@@ -173,7 +181,7 @@ const CreatePost = (prop: { match: { params: { subdogeit: string } }, userInfo: 
                             </div>
                         </div>
                     </div>
-                    <About subdogeit={subdogeitData} />
+                    <About subdogeit={subdogeitData} isAdmin = {isAdmin} />
                 </div>
                 : <FourZeroFour />
             }

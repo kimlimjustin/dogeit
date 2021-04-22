@@ -700,6 +700,14 @@ input[type=radio]:hover {
     margin: 0 0 .5rem 0;
 }
 
+.setting-btn{
+    width: -webkit-fill-available;
+    text-align: center;
+    background-color: var(--dark-color);
+    color: var(--yellow-color);
+    text-decoration: none;
+}
+
 @keyframes radio-animate {
     0% {
       opacity: .4;

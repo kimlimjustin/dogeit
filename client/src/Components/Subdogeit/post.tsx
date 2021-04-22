@@ -3,6 +3,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import FourZeroFour from "../Error/404";
+import FourZeroFive from "../Error/405";
 import encryptFetchingData from "../Lib/encryptFetchingData";
 import About from "./about"
 import Banner from "./banner"
@@ -15,15 +16,21 @@ const Post = (prop: { match: { params: { subdogeit: string, post: string } }, us
     const [cried, setCried] = useState<boolean>();
     const [laughed, setLaughed] = useState<boolean>();
     const [madded, setMadded] = useState<boolean>();
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [notAllowed, setNotAllowed] = useState<boolean>(false);
 
     useEffect(() => {
         if (prop.match.params.subdogeit) {
-            axios.get(`${process.env.REACT_APP_SERVER_URL}/subdogeit/get/${prop.match.params.subdogeit}`)
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/subdogeit/get/${prop.match.params.subdogeit}`, {withCredentials: true})
                 .then(res => {
-                    setSubdogeit(res.data.subdogeit)
-                    setNotFound(false)
+                    if (!(res.data.subdogeit.community_type === "Private" && !res.data.isAdmin)) {
+                        setIsAdmin(res.data.isAdmin)
+                        setSubdogeit(res.data.subdogeit)
+                        setNotFound(false)
+                    }else setNotAllowed(true)
                 })
                 .catch(err => {
+                    console.log(err)
                     if (String(err.response.status) === "404") {
                         setNotFound(true)
                     }
@@ -68,7 +75,9 @@ const Post = (prop: { match: { params: { subdogeit: string, post: string } }, us
 
     return (
         <>
-            {notFound ?
+            {notAllowed
+            ? <FourZeroFive />
+            : notFound ?
                 <FourZeroFour />
                 :
                 <>
@@ -90,7 +99,7 @@ const Post = (prop: { match: { params: { subdogeit: string, post: string } }, us
                                 }
                             </div>
                         </div>
-                        <About subdogeit = {subdogeitData} />
+                        <About subdogeit = {subdogeitData} isAdmin = {isAdmin} />
                     </div>
                     {prop.userInfo?
                     <div className="post-expressions">
