@@ -92,6 +92,7 @@ const Post = (prop: { match: { params: { subdogeit: string, post: string } }, us
                         </div>
                         <About />
                     </div>
+                    {prop.userInfo?
                     <div className="post-expressions">
                         {!cried?
                         <img src={`${process.env.PUBLIC_URL}/Icon/cry.jpg`} alt="Cry" className="post-expression" title="Cry" onClick = {() => cryExpression()} />:<img src={`${process.env.PUBLIC_URL}/Icon/cry.jpg`} alt="Uncry" className="post-expression expressed" title="Uncry" onClick = {() => cryExpression()} />
@@ -105,6 +106,7 @@ const Post = (prop: { match: { params: { subdogeit: string, post: string } }, us
                         :<img src={`${process.env.PUBLIC_URL}/Icon/mad.jpg`} alt="Unmad" className="post-expression expressed" title="Unmad" onClick = {() => madExpression()} />
                         }
                     </div>
+                    :<></>}
                 </>
             }
         </>
