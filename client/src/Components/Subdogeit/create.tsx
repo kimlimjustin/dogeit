@@ -67,10 +67,6 @@ const CreateSubdogeit = (prop: Prop) => {
                     <label htmlFor="Public">Public</label>
                 </div>
                 <div className="m-05">
-                    <input type="radio" name="communityType" id="Restricted" defaultValue = "Restricted" checked = {"Restricted" === inputCommunityType} onChange = {({target: {value}}) => setinputCommunityType(value)}/>
-                    <label htmlFor="Restricted">Restricted</label>
-                </div>
-                <div className="m-05">
                     <input type="radio" name="communityType" id="Private" defaultValue ="Private" checked = {"Private" === inputCommunityType} onChange = {({target: {value}}) => setinputCommunityType(value)}/>
                     <label htmlFor="Private">Private</label>
                 </div>

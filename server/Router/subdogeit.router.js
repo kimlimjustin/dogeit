@@ -26,7 +26,7 @@ router.post('/create', jsonParser, (req, res) => {
                 const alrExist = await Subdogeit.exists({name: req.body.name.replace(/\s/, '-')})
                 if(alrExist) res.status(400).json({"status": "006"})
                 else{
-                    const newSubdogeit = new Subdogeit({name: req.body.name.replace(/\s/, '-').toLowerCase(), description: req.body.description, community_type: "Public", admin: [user._id], dogeitors: [user._id]})
+                    const newSubdogeit = new Subdogeit({name: req.body.name.replace(/\s/, '-').toLowerCase(), description: req.body.description, community_type: req.body.community_type, admin: [user._id], dogeitors: [user._id]})
                     newSubdogeit.save()
                     .then(() => res.json({"message": "Success"}))
                 }
@@ -41,7 +41,10 @@ router.get('/get/:subdogeit', (req, res) => {
         else{
             Post.find({subdogeit: subdogeit._id})
             .then(posts => {
-                res.json({subdogeit, posts})
+                if(req.headers.cookie){
+                    let user =parseJwt(parseHeader(req.headers.cookie).value).user
+                    res.json({subdogeit, posts, isAdmin: String(user._id) === String(subdogeit.admin[0])})
+                }else res.json({subdogeit, posts})
             })
         }
     })
