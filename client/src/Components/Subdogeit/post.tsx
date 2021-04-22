@@ -90,7 +90,7 @@ const Post = (prop: { match: { params: { subdogeit: string, post: string } }, us
                                 }
                             </div>
                         </div>
-                        <About />
+                        <About subdogeit = {subdogeitData} />
                     </div>
                     {prop.userInfo?
                     <div className="post-expressions">

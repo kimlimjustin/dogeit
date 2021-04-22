@@ -674,6 +674,32 @@ input[type=radio]:hover {
     border: .2rem solid #a09a43 !important;
 }
 
+.popular-posts{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.popular-post-box{
+    margin: 1rem;
+    background-color: var(--yellow-color);
+    color: var(--dark-color);
+    border-radius: .5rem;
+    padding: 1rem;
+    width: 200px;
+    height: 150px;
+}
+
+.popular-post-box img{
+    width: 100%;
+    height: calc(150px - 1.5rem);
+}
+
+.popular-post-box h3{
+    margin: 0 0 .5rem 0;
+}
+
 @keyframes radio-animate {
     0% {
       opacity: .4;

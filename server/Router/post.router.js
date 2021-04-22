@@ -135,9 +135,20 @@ router.post('/mad', jsonParser, (req, res) => {
     })
 })
 
-router.get('/all', (req, res) => {
-    Post.find().limit(100).sort({_id: -1})
-    .then(posts => res.json(posts))
+router.get('/all', async (req, res) => {
+    resPosts = []
+    await Subdogeit.find({community_type: "Public"}, {}, {}, (err, subdogeits) => {
+        subdogeits.forEach(async (subdogeit, subdogeitIndex) => {
+            await Post.find({subdogeit:subdogeit._id}, {}, {}, async (err, posts) => {
+                await posts.forEach(async (post, postIndex) => {
+                    await resPosts.push(Object.assign(post, {subdogeit: subdogeit.name}))
+                    if(subdogeitIndex === subdogeits.length -1 && postIndex === posts.length - 1){
+                        res.json(resPosts)
+                    }
+                })
+            })
+        })
+    })
 })
 
 module.exports = router;
