@@ -1,6 +1,8 @@
 # Dogeit
 🐶 Doge version of reddit.
 
+![Dogeit demo](https://drive.google.com/uc?export=view&id=1E9MtGSK6GanZC4KzIMgJksa3Mpysv8DP)
+
 ## Local Setup
 - Clone this repository or fork it
 - Navigate to `client` directory
