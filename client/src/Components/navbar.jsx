@@ -123,7 +123,7 @@ const Navbar = ({userInfo}) => {
                     </svg>
                     <div className="topnav-item user-menu">
                         <img src = {`${process.env.REACT_APP_SERVER_URL}/${user.profile_picture.filename}`} className="topnav-user-pp" alt={`${user.name}'s profile`} />
-                        <span className="topnav-desc">{user.name} (1 Karma)</span>
+                        <span className="topnav-desc">{user.name}</span>
                     </div>
                 </div>
                 :
